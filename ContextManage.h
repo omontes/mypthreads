@@ -1,4 +1,6 @@
-
+/*
+ * Credits to: https://github.com/marceloprates/uthread
+ */
 #ifndef CONTEXTMANAGE_H
 #define	CONTEXTMANAGE_H
 #include "ucontext.h"

@@ -1,3 +1,6 @@
+/*
+ * Credits to: https://github.com/marceloprates/uthread
+ */
 #ifndef TCB_H
 #define	TCB_H
 

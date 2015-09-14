@@ -1,8 +1,5 @@
-/* 
- * File:   TCBQueue.h
- * Author: oscar
- *
- * Created on September 10, 2015, 10:25 AM
+/*
+ * Credits to: https://github.com/marceloprates/uthread
  */
 #ifndef TCB_QUEUE_H
 #define	TCB_QUEUE_H

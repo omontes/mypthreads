@@ -1,8 +1,5 @@
-/* 
- * File:   TCB_list.h
- * Author: oscar
- *
- * Created on September 14, 2015, 3:45 PM
+/*
+ * Credits to: https://github.com/marceloprates/uthread
  */
 
 #ifndef TCB_LIST_H
