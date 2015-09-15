@@ -7,7 +7,7 @@ void *proc1(void *x) {
 
     int n1 = *((int *) x);
     while (n1 > 0) {
-        if(n1==3000){
+        if(n1==15){
             printf("Yield de T1\n");
             sleep(2);
             my_thread_yield();
@@ -21,7 +21,7 @@ void *proc2(void *x) {
 
     int n2 = *((int *) x);
     while (n2 > 0) {
-        if(n2==300){
+        if(n2==3){
             printf("Yield de T2\n");
             sleep(2);
             my_thread_yield();
@@ -36,15 +36,19 @@ void *proc2(void *x) {
 int main(int argc, char** argv) {
 
 
-    int proc1Limit = 5000;
-    int proc2Limit = 500;
+    int proc1Limit = 25;
+    int proc2Limit = 5;
 
     my_thread_init();
 
-    my_thread_create(proc1, 1, &proc1Limit);
-    my_thread_create(proc2, 1, &proc2Limit);
-
-    while (1);
+    int t1= my_thread_create(proc1, 1, &proc1Limit);
+    int t2= my_thread_create(proc2, 1, &proc2Limit);
+    uthread_join(t1);
+    uthread_join(t2);
+    if(Is_main()==1){
+        printf("Soy el hilo main\n");
+    }
+    printf("Main termino\n");
 
     return (EXIT_SUCCESS);
 }

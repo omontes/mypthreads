@@ -14,12 +14,13 @@
 #include "RoundRobin.h"
 #include "Dispatcher.h"
 
-void *contextoFinalizacion(void *x);
-void my_thread_create(void *(*function)(void *), int argc, void *arg);
+void *hiloFinalizacion(void *x);
+int my_thread_create(void *(*function)(void *), int argc, void *arg);
 void crearContextoFinalizacion();
 void my_thread_init();
 void my_thread_yield();
 void yieldTread();
+int Is_main();
 
 
 #endif	/* THREAD_H */

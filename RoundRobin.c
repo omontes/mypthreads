@@ -4,9 +4,9 @@ TCB* currentThread;
 TCB_list* all_threads; // Contiene todos los hilos que no han finalizado
 TCB_queue *TCBReadyQueue; // Contiene todos los hilos en estado ready
 // Contador para el siguiente thread id con el cual se creara el siguiente hilo
-int next_threadID = 0; 
+int next_threadID; 
 // Cuenta cuantos hilos existen en un determinado tiempo
-int threadCounter = 0; 
+int threadCounter; 
 /*
  * Inicializa el calendarizador de tipo round robin
  */
@@ -14,7 +14,8 @@ void initRoundRobin() {
     struct sigaction activador;
     activador.sa_handler = scheduler;
     setupTimer(activador);
-    
+    next_threadID = 0;
+    threadCounter = 0;
     //Crear la cola de los hilos en estado ready
     TCBReadyQueue = TCB_queue_create();
     // Crear la lista de todos los hilos que no han finalizado
@@ -100,7 +101,7 @@ int ready(TCB* thread) {
 /*
  * Manda a ejecuccion el TCB que este en la cola y lo pone en ejecuccion
  */
-void despacharSiguienteHilo() {
+int despacharSiguienteHilo() {
     /*Primero lo saca de la cola*/
     lockSignals();
     TCB* thread = DequeueTCB(TCBReadyQueue);
@@ -110,12 +111,20 @@ void despacharSiguienteHilo() {
     int empty = TCB_queue_is_empty(TCBReadyQueue);
     if (empty == 1) {
         pauseTimer();
+        currentThread = thread;
+        currentThread->state = RUNNING;
+        dispatch(thread);
+        //return NO_ERROR; // Ready queue emptied. All threads are now finished.
     }
-    /*Pone al hilo en estado de ejecuccion*/
-    currentThread = thread;
-    currentThread->state = RUNNING;
-    /*Setea el contexto del hilo*/
-    dispatch(thread);
+    else{
+        /*Pone al hilo en estado de ejecuccion*/
+        currentThread = thread;
+        currentThread->state = RUNNING;
+        /*Setea el contexto del hilo*/
+        dispatch(thread);
+        return ERROR; // If execution reached this point, an error ocurred
+    }
+   
 }
 
 /*
@@ -124,4 +133,50 @@ void despacharSiguienteHilo() {
 TCB* getRunningContext() {
     return currentThread;
 }
+
+int Block(TCB* thread, TCB* waited_for)
+{
+	return TCB_block(thread, waited_for);
+}
+
+void Unblock(TCB* thread, TCB* waited_for)
+{
+	TCB_unblock(thread, waited_for);
+
+	ready(thread);
+}
+
+void Unblock_waiting_for_me(TCB* thread)
+{
+	TCB_list_node* pointer = (thread->waiting_for_me)->front;
+
+	while(pointer != NULL)
+	{
+		Unblock(pointer->data, thread);
+
+		pointer = pointer->next;
+	}
+}
+
+void Kill(TCB* thread)
+{
+	Unblock_waiting_for_me(thread);
+
+	TCB_list_remove(all_threads, thread); // Removes thread from list of current threads
+
+	threadCounter--;
+	free(thread->waiting_for_me); // Frees list of threads blocked by the thread that exited
+	free(thread); // Frees pointer to thread that exited
+}
+
+TCB* Find_TCB(int tid)
+{
+	return TCB_list_get(all_threads, tid);
+}
+
+int No_threads_beside_main()
+{
+	return threadCounter == 1;
+}
+
 

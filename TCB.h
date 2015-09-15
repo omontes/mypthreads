@@ -3,7 +3,7 @@
  */
 #ifndef TCB_H
 #define	TCB_H
-
+#include "TCB_list.h"
 
 #define NO_ERROR 0
 #define ERROR -1

@@ -23,9 +23,17 @@ void initRoundRobin();
 void scheduler();
 int crear(ucontext_t* newcontext);
 int ready(TCB* thread);
-void despacharSiguienteHilo();
+int despacharSiguienteHilo();
+
 
 TCB* getRunningContext();
+
+int	Block(TCB* thread, TCB* waited_for);
+void	Unblock(TCB* thread, TCB* waited_for);
+void	Unblock_waiting_for_me(TCB* thread);
+void	Kill(TCB* thread);
+TCB*	Find_TCB(int tid);
+int	No_threads_beside_main();
 
 #endif	/* ROUNDROBIN_H */
 

@@ -11,6 +11,7 @@ TCB* TCB_create(int tid, ucontext_t* context, State state) {
         t->thread_id = tid;
         t->context = context;
         t->state = state;
+        t->waiting_for_me = TCB_list_create();
         return t;
     }
 }
@@ -61,5 +62,46 @@ char* TCB_to_string(TCB* tcb)
 		sprintf(TCB_string, format, tid, State_to_string(state), waiting_for_me_string);
 		
 		return TCB_string;
+	}
+}
+
+
+int TCB_block(TCB* waiting_thread, TCB* blocking_thread)
+{
+	if(blocking_thread == NULL)
+	{
+		return ERROR;
+	}
+	else if(waiting_thread == NULL)
+	{
+		return ERROR;
+	}
+	else
+	{
+		TCB_list_add(blocking_thread->waiting_for_me, waiting_thread);
+
+		waiting_thread->state = BLOCKED;
+
+		return NO_ERROR;
+	}
+}
+
+int TCB_unblock(TCB* waiting_thread, TCB* blocking_thread)
+{
+	if(blocking_thread == NULL)
+	{
+		return ERROR;
+	}
+	else if(waiting_thread == NULL)
+	{
+		return ERROR;
+	}
+	else
+	{
+		TCB_list_remove(blocking_thread->waiting_for_me, waiting_thread);
+
+		waiting_thread->state = READY;
+
+		return NO_ERROR;
 	}
 }
