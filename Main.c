@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "MyPthread.h"
+#include "MyMutex.h"
 #include "TCB.h"
 
 void *proc1(void *x) {
@@ -43,7 +44,10 @@ int main(int argc, char** argv) {
     int proc2Limit = 5;
 
     my_thread_init();
-    
+    my_mutex_init();
+    myMutex* mt =my_mutex_create();
+    //my_mutex_block(mt);
+    printf("el mutex esta bloqueado: %d\n",mt->isBlock);
     //my_thread_wait(10000000);
     int t1= my_thread_create(proc1, 1, &proc1Limit);
     int t2= my_thread_create(proc2, 1, &proc2Limit);

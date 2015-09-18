@@ -138,3 +138,41 @@ int Is_main()
 	TCB* current_thread = getRunningContext();
 	return current_thread->thread_id == main_tid;
 }
+
+
+void my_mutex_block(myMutex* mt){
+    if(mt->isBlock == 0){
+        mt->isBlock = 1;
+    }
+    else{
+        int gotContex = 0;
+        TCB* current_thread = getRunningContext();
+        Save(current_thread);
+        if(gotContex == 0){
+            gotContex = 1;
+            current_thread->state == BLOCKED;
+            TCB_list_add(block_threads, current_thread);
+            TCB_list_add(mt->lockThreads, current_thread);
+            despacharSiguienteHilo();
+            
+        }
+    }
+}
+
+void my_mutex_unblock(myMutex* mt) {
+    if (mt->lockThreads->size > 1) {
+        TCB_list* lockThreads = mt->lockThreads;
+        TCB* threadToUnlock = lockThreads->front->data;
+        ready(threadToUnlock);
+        TCB_list_remove(lockThreads, threadToUnlock);
+
+    } 
+    else {
+        mt->isBlock = 0;
+    }
+}
+
+
+
+
+

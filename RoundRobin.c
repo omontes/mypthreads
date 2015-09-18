@@ -3,6 +3,7 @@
 TCB* currentThread;
 TCB_list* all_threads; // Contiene todos los hilos que no han finalizado
 TCB_list* block_threads; // Contiene todos los hilos que esten bloqueados
+TCB_list* wait_threads; // Contiene todos los hilos que esten bloqueados
 TCB_queue *TCBReadyQueue; // Contiene todos los hilos en estado ready
 // Contador para el siguiente thread id con el cual se creara el siguiente hilo
 int next_threadID; 
@@ -22,6 +23,7 @@ void initRoundRobin() {
     // Crear la lista de todos los hilos que no han finalizado
     all_threads = TCB_list_create();
     block_threads = TCB_list_create();
+    wait_threads = TCB_list_create();
 
     ucontext_t current;
     currentThread = TCB_create(0, &current, READY);
@@ -123,7 +125,7 @@ int despacharSiguienteHilo() {
         
     int empty = TCB_queue_is_empty(TCBReadyQueue);
     
-    if ((empty == 1) & (TCB_list_is_empty(block_threads) == 1)) {
+    if ((empty == 1) & (TCB_list_is_empty(wait_threads) == 1)) {
         /*if (TCB_list_is_empty(block_threads) == 1) {
             pauseTimer();
         }*/
@@ -214,7 +216,7 @@ int No_threads_beside_main()
 
 int wait(TCB* thread, double waitTime) {
     lockSignals();
-    int result = TCB_list_add(block_threads, thread);
+    int result = TCB_list_add(wait_threads, thread);
     unlockSignals();
     if (result == ERROR) {
         return ERROR;
@@ -227,11 +229,11 @@ int wait(TCB* thread, double waitTime) {
     
 }
 int wakeupThreads(){
-    if(block_threads->front == NULL){
+    if(wait_threads->front == NULL){
         return 0;
     }
     lockSignals();
-    TCB* thread =block_threads->front->data;
+    TCB* thread =wait_threads->front->data;
     unlockSignals();
     if (thread->state == BLOCKED) {
         clock_t end;
@@ -240,7 +242,7 @@ int wakeupThreads(){
         total = end - thread->startTime / (double) 1000;
         if (total > thread->waitTime) {
             printf("Despierta\n");
-            TCB_list_remove(block_threads,thread);
+            TCB_list_remove(wait_threads,thread);
             ready(thread);
             return 1;
         }

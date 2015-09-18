@@ -38,6 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/ContextManage.o \
 	${OBJECTDIR}/Dispatcher.o \
 	${OBJECTDIR}/Main.o \
+	${OBJECTDIR}/Mutex.o \
+	${OBJECTDIR}/MyMutex.o \
 	${OBJECTDIR}/MyPthread.o \
 	${OBJECTDIR}/Queue.o \
 	${OBJECTDIR}/RoundRobin.o \
@@ -85,6 +87,16 @@ ${OBJECTDIR}/Main.o: Main.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Main.o Main.c
+
+${OBJECTDIR}/Mutex.o: Mutex.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Mutex.o Mutex.c
+
+${OBJECTDIR}/MyMutex.o: MyMutex.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyMutex.o MyMutex.c
 
 ${OBJECTDIR}/MyPthread.o: MyPthread.c 
 	${MKDIR} -p ${OBJECTDIR}

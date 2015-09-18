@@ -13,7 +13,7 @@
 #include "ContextManage.h"
 #include "RoundRobin.h"
 #include "Dispatcher.h"
-
+#include "Mutex.h"
 void my_thread_end();
 int my_thread_create(void *(*function)(void *), int argc, void *arg);
 void crearContextoFinalizacion();
@@ -25,6 +25,7 @@ void my_thread_wait(double segundos);
 void crearContextoDummy();
 void *dummyFunction(void *x);
 void my_thread_detach(int thread_id);
+void my_mutex_block(myMutex* mt);
 
 
 #endif	/* THREAD_H */
