@@ -17,12 +17,16 @@ void my_thread_init() {
     if (!gotcontext) {
         gotcontext = 1;
         main_tid = crear(main_context); // Creates main thread
-        crearContextoDummy();
+        crearContextoDummy(); //Crea un proceso idle
         despacharSiguienteHilo();
 
 
     }
 
+}
+void my_thread_detach(int thread_id){
+    TCB* thread=Find_TCB(thread_id);
+    thread->detached = 1;
 }
 /*
  *Esta funcion crea el contexto del nuevo hilo y le asigna el contexto de fina-
@@ -45,12 +49,12 @@ void *dummyFunction(void *x){
  * Crear el contexto que todos los hilos llaman al finalizar su funcion
  */
 void crearContextoFinalizacion() {
-    contextoTerminal = make_context(hiloFinalizacion, 0, 0);
+    contextoTerminal = make_context_noargs(my_thread_end, NULL);
 }
 /*
  * La funcion del contexto de finalizacion
  */
-void *hiloFinalizacion(void *x) {
+void my_thread_end(void *x) {
     TCB* thread = getRunningContext();
     Kill(thread);
     despacharSiguienteHilo();
@@ -90,12 +94,15 @@ int my_thread_join(int waited_thread_tid)
 	TCB* this_thread = getRunningContext();
         //El hilo que tiene que ejecutarse sin problemas y que no se bloquea
 	TCB* waited_thread = Find_TCB(waited_thread_tid);
-
+       
 	if(waited_thread == NULL) 
 	{
 		return ERROR;
 	}
-	
+	if(waited_thread->detached == 1){
+            return ERROR;
+        }
+
 	Block(this_thread, waited_thread); // Blocks this thread's TCB
 
 	Save(this_thread); // Saves 'here' as current thread context.
@@ -111,7 +118,6 @@ int my_thread_join(int waited_thread_tid)
 		return NO_ERROR;
 	}
 }
-
 void my_thread_wait(double segundos){
     int gotContext = 0;
     TCB* wait_thread = getRunningContext();

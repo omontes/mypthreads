@@ -14,7 +14,7 @@
 #include "RoundRobin.h"
 #include "Dispatcher.h"
 
-void *hiloFinalizacion(void *x);
+void my_thread_end();
 int my_thread_create(void *(*function)(void *), int argc, void *arg);
 void crearContextoFinalizacion();
 void my_thread_init();
@@ -24,6 +24,7 @@ int Is_main();
 void my_thread_wait(double segundos);
 void crearContextoDummy();
 void *dummyFunction(void *x);
+void my_thread_detach(int thread_id);
 
 
 #endif	/* THREAD_H */

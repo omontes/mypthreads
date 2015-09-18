@@ -20,6 +20,7 @@ struct TCB_struct {
     ucontext_t* context;
     State state;
     clock_t startTime;
+    int detached;
     double waitTime;
     struct TCB_list_struct* waiting_for_me;
 };

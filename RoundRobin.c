@@ -78,6 +78,7 @@ int crear(ucontext_t* newContext) {
 
     
     /*Lo agrega en la cola con estado Ready*/
+    thread->detached = 0;
     int rdy =ready(thread);
     /*
      * Si el tamano de la cola Tread Control Block es uno, entonces inicializa
@@ -230,31 +231,17 @@ int wakeupThreads(){
         return 0;
     }
     lockSignals();
-    //printf("si tengo que despertar a alguien %d\n",block_threads->front->data->thread_id);
     TCB* thread =block_threads->front->data;
-    //printf("hola id %d\n", thread->thread_id);
-    //printf("EL estado es:%s\n",State_to_string(thread->state));
     unlockSignals();
     if (thread->state == BLOCKED) {
         clock_t end;
         double total;
         end = clock();
-        /*printf("El wait time es: %f\n",(double)thread->waitTime);
-        printf("El end time es: %f\n",(double)end);
-        printf("El start time es: %f\n",(double)thread->startTime);*/
         total = end - thread->startTime / (double) 1000;
-        //printf("Total time taken by CPU: %f\n", total);
-        //printf("wait time: %f\n", thread->waitTime);
         if (total > thread->waitTime) {
-            //printf("Wake up motherfucker\n");
-           //Se agrega a la cola de listos y se pone con estado ready
+            printf("Despierta\n");
             TCB_list_remove(block_threads,thread);
             ready(thread);
-            //printf("tamano de block queue %d \n", TCB_list_is_empty(block_threads));
-            /*if(Is_main()==0){
-                printf("no es el main\n");
-                printf("tamano de ready queue %d \n", TCBReadyQueue->size);
-            }*/
             return 1;
         }
     }
