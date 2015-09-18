@@ -2,6 +2,7 @@
 #include <signal.h>
 TCB* currentThread;
 TCB_list* all_threads; // Contiene todos los hilos que no han finalizado
+TCB_list* block_threads; // Contiene todos los hilos que esten bloqueados
 TCB_queue *TCBReadyQueue; // Contiene todos los hilos en estado ready
 // Contador para el siguiente thread id con el cual se creara el siguiente hilo
 int next_threadID; 
@@ -20,6 +21,7 @@ void initRoundRobin() {
     TCBReadyQueue = TCB_queue_create();
     // Crear la lista de todos los hilos que no han finalizado
     all_threads = TCB_list_create();
+    block_threads = TCB_list_create();
 
     ucontext_t current;
     currentThread = TCB_create(0, &current, READY);
@@ -30,17 +32,24 @@ void initRoundRobin() {
 void scheduler() {
 
     int gotContext = 0;
-    Save(getRunningContext());
-
+    TCB* runningThread = getRunningContext();
+    Save(runningThread);
     if (!gotContext) {
         gotContext = 1;
         lockSignals();
-        TCB* nextThread = DequeueTCB(TCBReadyQueue);
-        ready(currentThread);
-        currentThread = nextThread;
-        currentThread->state = RUNNING;
-        unlockSignals();
-        dispatch(nextThread);
+        if (TCBReadyQueue->size != 0) {
+            TCB* nextThread = DequeueTCB(TCBReadyQueue);
+            ready(currentThread);
+            currentThread = nextThread;
+            currentThread->state = RUNNING;
+            unlockSignals();
+            dispatch(nextThread);
+            
+        }
+        else{
+            wakeupThreads();
+            dispatch(runningThread);
+        }
     }
 }
 /*
@@ -102,17 +111,32 @@ int ready(TCB* thread) {
  * Manda a ejecuccion el TCB que este en la cola y lo pone en ejecuccion
  */
 int despacharSiguienteHilo() {
+    
     /*Primero lo saca de la cola*/
     lockSignals();
     TCB* thread = DequeueTCB(TCBReadyQueue);
     unlockSignals();
     /*Valida si la cola esta vacia, es decir no hay ningun otro hilo, solo el 
      main*/
+    
+        
     int empty = TCB_queue_is_empty(TCBReadyQueue);
-    if (empty == 1) {
+    
+    if ((empty == 1) & (TCB_list_is_empty(block_threads) == 1)) {
+        /*if (TCB_list_is_empty(block_threads) == 1) {
+            pauseTimer();
+        }*/
+        //printf("entro\n");
         pauseTimer();
         currentThread = thread;
         currentThread->state = RUNNING;
+        
+        /*int wake = 0;
+        wake = wakeupThreads();
+        if (wake == 1) {
+            printf("Inicio otra vez  el tiempo\n");
+            startTimer();
+        }*/
         dispatch(thread);
         //return NO_ERROR; // Ready queue emptied. All threads are now finished.
     }
@@ -120,7 +144,8 @@ int despacharSiguienteHilo() {
         /*Pone al hilo en estado de ejecuccion*/
         currentThread = thread;
         currentThread->state = RUNNING;
-        /*Setea el contexto del hilo*/
+        int wake = 0;
+        wake = wakeupThreads();
         dispatch(thread);
         return ERROR; // If execution reached this point, an error ocurred
     }
@@ -145,7 +170,10 @@ void Unblock(TCB* thread, TCB* waited_for)
 
 	ready(thread);
 }
-
+/*
+ * Esta funcion permite desbloquear el hilo que estaba esperando que terminara
+ * el procedimiento que hacia este hilo
+ */
 void Unblock_waiting_for_me(TCB* thread)
 {
 	TCB_list_node* pointer = (thread->waiting_for_me)->front;
@@ -160,6 +188,7 @@ void Unblock_waiting_for_me(TCB* thread)
 
 void Kill(TCB* thread)
 {
+        lockSignals();
 	Unblock_waiting_for_me(thread);
 
 	TCB_list_remove(all_threads, thread); // Removes thread from list of current threads
@@ -167,8 +196,11 @@ void Kill(TCB* thread)
 	threadCounter--;
 	free(thread->waiting_for_me); // Frees list of threads blocked by the thread that exited
 	free(thread); // Frees pointer to thread that exited
+        unlockSignals();
 }
-
+/*
+ * Encuentra el hilo en la lista de all_threads
+ */
 TCB* Find_TCB(int tid)
 {
 	return TCB_list_get(all_threads, tid);
@@ -177,6 +209,57 @@ TCB* Find_TCB(int tid)
 int No_threads_beside_main()
 {
 	return threadCounter == 1;
+}
+
+int wait(TCB* thread, double waitTime) {
+    lockSignals();
+    int result = TCB_list_add(block_threads, thread);
+    unlockSignals();
+    if (result == ERROR) {
+        return ERROR;
+    } else {
+        thread->waitTime = waitTime;
+        thread->startTime = clock();
+        thread->state = BLOCKED;
+        return thread->thread_id;
+    }
+    
+}
+int wakeupThreads(){
+    if(block_threads->front == NULL){
+        return 0;
+    }
+    lockSignals();
+    //printf("si tengo que despertar a alguien %d\n",block_threads->front->data->thread_id);
+    TCB* thread =block_threads->front->data;
+    //printf("hola id %d\n", thread->thread_id);
+    //printf("EL estado es:%s\n",State_to_string(thread->state));
+    unlockSignals();
+    if (thread->state == BLOCKED) {
+        clock_t end;
+        double total;
+        end = clock();
+        /*printf("El wait time es: %f\n",(double)thread->waitTime);
+        printf("El end time es: %f\n",(double)end);
+        printf("El start time es: %f\n",(double)thread->startTime);*/
+        total = end - thread->startTime / (double) 1000;
+        //printf("Total time taken by CPU: %f\n", total);
+        //printf("wait time: %f\n", thread->waitTime);
+        if (total > thread->waitTime) {
+            //printf("Wake up motherfucker\n");
+           //Se agrega a la cola de listos y se pone con estado ready
+            TCB_list_remove(block_threads,thread);
+            ready(thread);
+            //printf("tamano de block queue %d \n", TCB_list_is_empty(block_threads));
+            /*if(Is_main()==0){
+                printf("no es el main\n");
+                printf("tamano de ready queue %d \n", TCBReadyQueue->size);
+            }*/
+            return 1;
+        }
+    }
+    
+    
 }
 
 

@@ -45,6 +45,8 @@ int TCB_list_add(TCB_list* tcb_list, TCB* tcb)
 		tcb_list->front = new_node;
 		tcb_list->front->next = NULL;
 		tcb_list->front->previous = NULL;
+                
+                tcb_list->size++;
 
 		return NO_ERROR;
 	}
@@ -58,7 +60,7 @@ int TCB_list_add(TCB_list* tcb_list, TCB* tcb)
 		new_node->next = NULL;
 
 		tcb_list->rear = (tcb_list->rear)->next;
-
+                tcb_list->size++;
 		return NO_ERROR;
 	}
 	else
@@ -70,7 +72,7 @@ int TCB_list_add(TCB_list* tcb_list, TCB* tcb)
 		new_node->next = NULL;
 
 		tcb_list->rear = (tcb_list->rear)->next;
-
+                tcb_list->size++;
 		return NO_ERROR;
 	}
 }
@@ -89,21 +91,25 @@ TCB* TCB_list_remove(TCB_list* tcb_list, TCB* tcb)
 			{
 				tcb_list->front = NULL;
 				tcb_list->rear = NULL;
+                                tcb_list->size--;
 			}
 			else if(pointer->previous == NULL) // list has more than one element and first element is to be removed
 			{
 				tcb_list->front = (tcb_list->front)->next;
 				(tcb_list->front)->previous = NULL;
+                                tcb_list->size--;
 			}
 			else if(pointer->next == NULL) // list has more than one element and last element is to be removed
 			{
 				(pointer->previous)->next = pointer->next;
 				tcb_list->rear = pointer->previous;
+                                tcb_list->size--;
 			}
 			else // default
 			{
 				(pointer->previous)->next = pointer->next;
 				pointer->next->previous = pointer->previous;
+                                tcb_list->size--;
 			}
 
 			TCB* data = to_be_removed->data;

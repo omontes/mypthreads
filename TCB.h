@@ -4,11 +4,10 @@
 #ifndef TCB_H
 #define	TCB_H
 #include "TCB_list.h"
-
 #define NO_ERROR 0
 #define ERROR -1
 #include "ucontext.h"
-
+#include <time.h>
 typedef struct TCB_list_struct TCB_list; // forward declaration
 typedef enum {
     READY,
@@ -20,6 +19,8 @@ struct TCB_struct {
     int thread_id;
     ucontext_t* context;
     State state;
+    clock_t startTime;
+    double waitTime;
     struct TCB_list_struct* waiting_for_me;
 };
 

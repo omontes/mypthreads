@@ -25,6 +25,7 @@ struct TCB_list_struct
 {
 	struct TCB_list_node_struct* front;
 	struct TCB_list_node_struct* rear;
+        int size;
 };
 
 typedef struct TCB_list_node_struct TCB_list_node;

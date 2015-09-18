@@ -1,7 +1,9 @@
 #include "MyPthread.h"
 
 ucontext_t* contextoTerminal;
+ucontext_t* contextoDummy;
 int main_tid; // thread id del hilo principal
+int dummy_tid; //idle thread 
 
 /*
  * Inicializa el roundRobin y guarda el contexto principal
@@ -15,6 +17,7 @@ void my_thread_init() {
     if (!gotcontext) {
         gotcontext = 1;
         main_tid = crear(main_context); // Creates main thread
+        crearContextoDummy();
         despacharSiguienteHilo();
 
 
@@ -28,6 +31,15 @@ void my_thread_init() {
 int my_thread_create(void *(*function)(void *), int argc, void *arg) {
     ucontext_t* nuevoHilo = make_context(function, arg, contextoTerminal);
     return crear(nuevoHilo);
+}
+
+void crearContextoDummy(){
+    contextoDummy = make_context(dummyFunction, 0, 0);
+    dummy_tid = crear(contextoDummy); // Creates dummy thread
+    despacharSiguienteHilo();
+}
+void *dummyFunction(void *x){
+    while(1);
 }
 /*
  * Crear el contexto que todos los hilos llaman al finalizar su funcion
@@ -69,8 +81,10 @@ void yieldTread() {
     ready(getRunningContext());
     despacharSiguienteHilo();
 }
-
-int uthread_join(int waited_thread_tid)
+/*
+ * Realiza un join del hilo con el que el hilo  que llama al join debe esperar
+ */
+int my_thread_join(int waited_thread_tid)
 {
         //El hilo que estaba corriendo y que llamo al join
 	TCB* this_thread = getRunningContext();
@@ -88,15 +102,31 @@ int uthread_join(int waited_thread_tid)
 
 	if(TCB_is_blocked(this_thread)) // Stop thread only if thread is blocked.
 	{
+                //printf("antes de main termino\n");
 		return despacharSiguienteHilo();
 	}
 	else // If thread isn't blocked, we're returning to this point via context switching: we don't stop the thread, just return.
 	{
+                printf("ya el thread no esta bloqueado\n");
 		return NO_ERROR;
 	}
 }
 
-
+void my_thread_wait(double segundos){
+    int gotContext = 0;
+    TCB* wait_thread = getRunningContext();
+    Save(wait_thread);
+    if (gotContext == 0) {
+        gotContext = 1;
+        wait(wait_thread, segundos);
+        despacharSiguienteHilo();
+    }
+    else{
+        return;
+    }
+    
+    
+} 
 int Is_main()
 {
 	TCB* current_thread = getRunningContext();

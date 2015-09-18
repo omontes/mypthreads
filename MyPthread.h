@@ -21,6 +21,9 @@ void my_thread_init();
 void my_thread_yield();
 void yieldTread();
 int Is_main();
+void my_thread_wait(double segundos);
+void crearContextoDummy();
+void *dummyFunction(void *x);
 
 
 #endif	/* THREAD_H */

@@ -18,6 +18,7 @@
 #include "TCBQueue.h"
 #include "Dispatcher.h"
 #include "Timer.h"
+#include <time.h>
 
 void initRoundRobin();
 void scheduler();
@@ -34,6 +35,8 @@ void	Unblock_waiting_for_me(TCB* thread);
 void	Kill(TCB* thread);
 TCB*	Find_TCB(int tid);
 int	No_threads_beside_main();
+int wakeupThreads();
+int wait(TCB* thread, double waitTime);
 
 #endif	/* ROUNDROBIN_H */
 
