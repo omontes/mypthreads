@@ -118,31 +118,19 @@ int despacharSiguienteHilo() {
     int empty = TCB_queue_is_empty(TCBReadyQueue);
     
     if ((empty == 1) & (TCB_list_is_empty(wait_threads) == 1)) {
-        /*if (TCB_list_is_empty(block_threads) == 1) {
-            pauseTimer();
-        }*/
-        //printf("entro\n");
         pauseTimer();
         currentThread = thread;
         currentThread->state = RUNNING;
-        
-        /*int wake = 0;
-        wake = wakeupThreads();
-        if (wake == 1) {
-            printf("Inicio otra vez  el tiempo\n");
-            startTimer();
-        }*/
         dispatch(thread);
-        //return NO_ERROR; // Ready queue emptied. All threads are now finished.
+        
     }
     else{
-        /*Pone al hilo en estado de ejecuccion*/
         currentThread = thread;
         currentThread->state = RUNNING;
         int wake = 0;
         wake = wakeupThreads();
         dispatch(thread);
-        return ERROR; // If execution reached this point, an error ocurred
+        return ERROR; 
     }
    
 }
@@ -213,8 +201,9 @@ int wait(TCB* thread, double waitTime) {
     if (result == ERROR) {
         return ERROR;
     } else {
+        clock_t start = clock();
         thread->waitTime = waitTime;
-        thread->startTime = clock();
+        thread->startTime = start;
         thread->state = BLOCKED;
         return thread->thread_id;
     }
@@ -231,10 +220,8 @@ int wakeupThreads(){
         clock_t end;
         double total;
         end = clock();
-        total = end - thread->startTime / (double) 1000;
+        total = (end - thread->startTime) / (double) 1000;
         if (total > thread->waitTime) {
-            printf("despierta\n");
-            printf("soy hilo numero: %d\n",thread->thread_id);
             TCB_list_remove(wait_threads,thread);
             ready(thread);
             return 1;

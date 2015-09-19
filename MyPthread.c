@@ -130,6 +130,7 @@ void my_thread_wait(double segundos){
     
     
     
+    
 } 
 int Is_main()
 {
