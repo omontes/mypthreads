@@ -42,7 +42,7 @@ void *shareProc(void *x) {
     while (share > 0) {
         printf("N:%d\n",share);
         share--;
-        my_thread_wait(1000000);
+        my_thread_wait(1000);//Espera un segundo
     }
     my_mutex_unblock(mt);
     share = 10;
