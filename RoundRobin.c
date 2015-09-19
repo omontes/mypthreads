@@ -106,32 +106,20 @@ int ready(TCB* thread) {
  * Manda a ejecuccion el TCB que este en la cola y lo pone en ejecuccion
  */
 int despacharSiguienteHilo() {
-    
+
     /*Primero lo saca de la cola*/
     lockSignals();
     TCB* thread = DequeueTCB(TCBReadyQueue);
     unlockSignals();
     /*Valida si la cola esta vacia, es decir no hay ningun otro hilo, solo el 
      main*/
+    currentThread = thread;
+    currentThread->state = RUNNING;
+    int wake = 0;
+    wake = wakeupThreads();
+    dispatch(thread);
+    return ERROR;
     
-        
-    int empty = TCB_queue_is_empty(TCBReadyQueue);
-    
-    if ((empty == 1) & (TCB_list_is_empty(wait_threads) == 1)) {
-        pauseTimer();
-        currentThread = thread;
-        currentThread->state = RUNNING;
-        dispatch(thread);
-        
-    }
-    else{
-        currentThread = thread;
-        currentThread->state = RUNNING;
-        int wake = 0;
-        wake = wakeupThreads();
-        dispatch(thread);
-        return ERROR; 
-    }
    
 }
 

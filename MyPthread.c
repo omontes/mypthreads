@@ -124,6 +124,7 @@ void my_thread_wait(double segundos){
     Save(wait_thread);
     if (gotContext == 0) {
         gotContext = 1;
+        //printf("espa el hilo numero: %d\n",wait_thread->thread_id);
         wait(wait_thread, segundos);
         despacharSiguienteHilo();
     }
