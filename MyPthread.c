@@ -127,9 +127,7 @@ void my_thread_wait(double segundos){
         wait(wait_thread, segundos);
         despacharSiguienteHilo();
     }
-    else{
-        return;
-    }
+    
     
     
 } 
@@ -143,6 +141,7 @@ int Is_main()
 void my_mutex_block(myMutex* mt){
     if(mt->isBlock == 0){
         mt->isBlock = 1;
+        return;
     }
     else{
         int gotContex = 0;
@@ -153,6 +152,7 @@ void my_mutex_block(myMutex* mt){
             current_thread->state == BLOCKED;
             TCB_list_add(block_threads, current_thread);
             TCB_list_add(mt->lockThreads, current_thread);
+            //printf("el tamano de mt :%d\n",mt->lockThreads->size);
             despacharSiguienteHilo();
             
         }
@@ -160,7 +160,8 @@ void my_mutex_block(myMutex* mt){
 }
 
 void my_mutex_unblock(myMutex* mt) {
-    if (mt->lockThreads->size > 1) {
+    TCB_list* lockThreads = mt->lockThreads;
+    if (lockThreads->size > 0) {
         TCB_list* lockThreads = mt->lockThreads;
         TCB* threadToUnlock = lockThreads->front->data;
         ready(threadToUnlock);

@@ -16,7 +16,7 @@ TCB_list* TCB_list_create()
 	{
 		new_list->front = NULL;
 		new_list->rear = NULL;
-
+                new_list->size = 0; 
 		return new_list;
 	}
 }

@@ -1,14 +1,6 @@
 #include "RoundRobin.h"
 #include <signal.h>
-TCB* currentThread;
-TCB_list* all_threads; // Contiene todos los hilos que no han finalizado
-TCB_list* block_threads; // Contiene todos los hilos que esten bloqueados
-TCB_list* wait_threads; // Contiene todos los hilos que esten bloqueados
-TCB_queue *TCBReadyQueue; // Contiene todos los hilos en estado ready
-// Contador para el siguiente thread id con el cual se creara el siguiente hilo
-int next_threadID; 
-// Cuenta cuantos hilos existen en un determinado tiempo
-int threadCounter; 
+
 /*
  * Inicializa el calendarizador de tipo round robin
  */
@@ -241,7 +233,8 @@ int wakeupThreads(){
         end = clock();
         total = end - thread->startTime / (double) 1000;
         if (total > thread->waitTime) {
-            printf("Despierta\n");
+            printf("despierta\n");
+            printf("soy hilo numero: %d\n",thread->thread_id);
             TCB_list_remove(wait_threads,thread);
             ready(thread);
             return 1;

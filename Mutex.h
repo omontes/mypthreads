@@ -11,7 +11,7 @@
 #include "TCB_list.h"
 struct my_mutex
 {
-	struct TCB_list* lockThreads;
+	TCB_list* lockThreads;
 	int idMutex;
         int isBlock;
 };

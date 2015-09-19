@@ -9,7 +9,7 @@
 #define	TIMER_H
 
 #define INTERVAL 5000; // 5ms - quantum //
-#define START 100000; // 100 ms //
+#define START 10; // 1 ms //
 #include <signal.h>
 #include <sys/time.h>
 struct itimerval it;

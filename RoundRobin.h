@@ -38,5 +38,15 @@ int	No_threads_beside_main();
 int wakeupThreads();
 int wait(TCB* thread, double waitTime);
 
+TCB* currentThread;
+TCB_list* all_threads; // Contiene todos los hilos que no han finalizado
+TCB_list* block_threads; // Contiene todos los hilos que esten bloqueados
+TCB_list* wait_threads; // Contiene todos los hilos que esten bloqueados
+TCB_queue *TCBReadyQueue; // Contiene todos los hilos en estado ready
+// Contador para el siguiente thread id con el cual se creara el siguiente hilo
+int next_threadID; 
+// Cuenta cuantos hilos existen en un determinado tiempo
+int threadCounter; 
+
 #endif	/* ROUNDROBIN_H */
 
