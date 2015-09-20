@@ -4,15 +4,19 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>figura.h</itemPath>
+      <itemPath>tserver.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>figura.c</itemPath>
+      <itemPath>tserver.c</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>tserver.c</itemPath>
+      <itemPath>main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -43,7 +47,15 @@
           <commandLine>-lncurses -lpthread</commandLine>
         </linkerTool>
       </compileType>
+      <item path="figura.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="figura.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="tserver.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tserver.h" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -66,7 +78,15 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="figura.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="figura.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="tserver.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tserver.h" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
   </confs>

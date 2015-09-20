@@ -35,6 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/figura.o \
+	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/tserver.o
 
 
@@ -62,10 +64,25 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servidoranimacion: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servidoranimacion ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/figura.o: figura.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/figura.o figura.c
+
+${OBJECTDIR}/main.o: main.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.c
+
 ${OBJECTDIR}/tserver.o: tserver.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/tserver.o tserver.c
+
+${OBJECTDIR}/tserver.h.gch: tserver.h 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o "$@" tserver.h
 
 # Subprojects
 .build-subprojects:
