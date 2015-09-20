@@ -22,6 +22,61 @@ pFigura* unser(pFigura *figura, char* buf){
         
 }
 
+void initLista(){
+    listaFigurasMonitor = list_create();
+    
+}
+
+int verificarEnableFigura(pFigura* figura){
+    if(figura->enable == 1){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+void procesarFiguraEntrante(pFigura* figura){
+    if(list_is_empty(listaFigurasMonitor)){
+        list_add(listaFigurasMonitor, figura);
+        
+    } else {
+        
+        pFigura* fig = list_get(listaFigurasMonitor, figura->id);
+        if (fig == NULL) {
+            list_add(listaFigurasMonitor, figura);
+            
+        }
+        else{
+            fig->x_init = figura->x_init;
+            fig->y_init = figura->y_init;
+            
+        }
+    }
+}
+
+
+void pintarFigurasMonitor(WINDOW* win){
+    pNodo* pointer = listaFigurasMonitor->front;
+
+    while(pointer != NULL)
+    {
+       
+        pFigura* fig =pointer->data;
+        printFigure1(win,fig->y_init,fig->x_init,fig->rotation,fig->colorIn,fig->colorOut);
+        
+        pointer = pointer->next;
+    }
+
+    
+};
+
+
+void eliminarFiguraEntrante(pFigura* figura){
+    list_remove(listaFigurasMonitor,figura);
+}
+
+
 //Terminal
 
 void draw_borders(WINDOW *screen) {

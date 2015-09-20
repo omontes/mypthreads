@@ -20,11 +20,11 @@
 #ifndef TSERVER_H
 #define	TSERVER_H
 
-#define DELAY 5000000
+#define DELAY 1000000
 
 void show_ncurs();
 int open_socket();
-void* accept_client();
+void* pintame();
 int listener(void*sock);
 
 

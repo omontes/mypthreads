@@ -1,7 +1,8 @@
 #include "figura.h"
 
 pFigura* figura_create(int id, int x, int y, int rotation, int colorIn, 
-        int colorOut, int enable)
+        int colorOut, int enable, double waitTime, int incre_x, int incre_y, 
+        int dirx, int diry, int x_final, int y_final)
 {
     pFigura* new_figure = (pFigura*)malloc(sizeof(pFigura));
 
@@ -18,6 +19,15 @@ pFigura* figura_create(int id, int x, int y, int rotation, int colorIn,
         new_figure->colorIn = colorIn;
         new_figure->colorOut = colorOut;
         new_figure->enable = enable;
+        new_figure->waitTime = waitTime;
+        new_figure->incre_x = incre_x;
+        new_figure->incre_y = incre_y;
+        new_figure->dirx = dirx;
+        new_figure->diry = diry;
+        new_figure->x_final = x_final;
+        new_figure->y_final = y_final;
+ 
+        
         return new_figure;
     }
 }

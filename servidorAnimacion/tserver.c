@@ -3,7 +3,7 @@
 int open_socket() {
     struct sockaddr_in saddr;
     saddr.sin_family = AF_INET;
-    saddr.sin_port = htons(9999);
+    saddr.sin_port = htons(1020);
     saddr.sin_addr.s_addr = INADDR_ANY;
     int s;
     if ((s = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
@@ -24,33 +24,30 @@ int open_socket() {
     return s;
 }
 
-void *accept_client(void* ns) {
+void *pintame(pFigura* fig1) {
     char buf[1023];
-    int my_sock = *(int*) ns;
-    int cont = 0;
-    while (1) {
+    refresh();
+    while ((fig1->x_init != fig1->x_final) || (fig1->y_init != fig1->y_final)) {
 
-        if (cont == 20)
-            cont = 0;
-        pFigura* fig1 = figura_create(1, cont, 10, 0, 1,
-                2, 1);
-        cont++;
-
-        printw("%d\n", cont);
-
-
-        serialize(fig1, buf);
-        send(my_sock, buf, sizeof (buf), 0);
-
-        usleep(DELAY);
+        printw("xinit %d\n", fig1->x_init);
+        printw("yinit %d\n", fig1->y_init);
+        printw("xfinal: %d\n", fig1->x_final);
+        printw("yfinal: %d\n", fig1->y_final);
         refresh();
+        serialize(fig1, buf);
+        send(socket_monitor_1, buf, sizeof (buf), 0);
+        fig1->x_init += (fig1->incre_x * fig1->dirx);
+        fig1->y_init += (fig1->incre_y * fig1->diry);
+        usleep(fig1->waitTime);
         buf[0] = '\0';
 
 
 
 
     }
-    close(my_sock);
+    //falta condicion de pintar el ultimo
+    //NO SE PINTA MAS
+    
 }
 
 void serialize(pFigura*figura, char* buf) {

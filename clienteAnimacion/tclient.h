@@ -15,19 +15,34 @@
 #ifndef TCLIENT_H
 #define	TCLIENT_H
 
-
+//windows
 WINDOW *field_w;
 WINDOW *status_w;
 
+pLista* listaFigurasMonitor;
+
+
+
 //gcc with lncurses
 
-void show_ncurs();
 
+void initLista();
+int verificarEnableFigura(pFigura* figura);
+void procesarFiguraEntrante(pFigura* figura);
+void pintarFigurasMonitor();
+void eliminarFiguraEntrante(pFigura* figura);
+
+//Unserialize
+pFigura* unser(pFigura* fig, char* buf);
+
+
+
+void show_ncurs();
+void draw_borders(WINDOW *screen); 
 void printLine(WINDOW *win,int startrow,int startcol,int rotation);                            
 void printRectangle(WINDOW *win,int startrow,int startcol); 
 void printFigure1(WINDOW *win,int startrow,int startcol,int rotation,int colorRectangle, int colorLine); 
-//Unserialize
-pFigura* unser(pFigura* fig, char* buf);
+
 
 #endif	/* TCLIENT_H */
 
