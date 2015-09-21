@@ -1,9 +1,21 @@
 #include "tserver.h"
-int main(int argc, char*argv[]){
-	//signal(SIGPIPE,SIG_IGN);
 
-	int ch;
-	show_ncurs();
+void sig_int(int signo)
+{       
+        close(socket_monitor_1);
+	printf("Exit\n");
+	exit(0);
+}
+int main(int argc, char*argv[]){
+	
+        struct sigaction sa;
+        sa.sa_handler = &sig_int;
+        // Block every signal during the handler
+        sigfillset(&sa.sa_mask);
+        if (sigaction(SIGINT, &sa, NULL) == -1) {
+        printf("Error: cannot handle SIGINT"); 
+        }
+
 	int sock=open_socket();
 	if(sock==-1){
 		printf("error occured\n");
@@ -13,14 +25,14 @@ int main(int argc, char*argv[]){
 	int contador_sockets;
 	for(contador_sockets = 0; contador_sockets < 1;contador_sockets++){
 		 if(contador_sockets == 0){
-                        printw("creo monitor 1\n");
-                        refresh();
+                        printf("creo monitor 1\n");
+                        
                         socket_monitor_1 = listener((void*)&sock);}
 		 else
 		 	socket_monitor_2 = listener((void*)&sock);
 	}
-        printw("ya cree todos los sockets\n");
-        refresh();
+        printf("ya cree todos los sockets\n");
+        
 
         /*Crea las figuras del archivo de configuracion*/
 	pthread_t hilofigura1;
@@ -30,25 +42,20 @@ int main(int argc, char*argv[]){
 			return 1;
 		}
         pthread_t hilofigura2;
-        pFigura* fig2 = figura_create(2, 0, 5, 0, 3, 4, 1,2000000,10,1,1,1,50,10);
+        pFigura* fig2 = figura_create(2, 0, 5, 0, 3, 4, 1,3000000,10,1,1,1,50,10);
 	if ( pthread_create(&hilofigura2, NULL, pintame, (void*)fig2) < 0 ){
 			perror("Thread problem\n");
 			return 1;
 		}
     
 
-    //Exit
-	while(1){
-		ch = getch();
-		if(ch=='q'){
-                        
-			break;
-		}
+    	while(1);
+		
 	
-	}
+	
         close(socket_monitor_1);
-	endwin();
 
-	endwin();
 	exit(0);
 }
+
+

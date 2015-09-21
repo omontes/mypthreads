@@ -7,34 +7,43 @@ int open_socket() {
     saddr.sin_addr.s_addr = INADDR_ANY;
     int s;
     if ((s = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
-        printw("Something wrong with socket!\n");
-        refresh();
+        printf("Something wrong with socket!\n");
+        
     }
     if (bind(s, (struct sockaddr*) &saddr, (socklen_t) (sizeof (saddr))) < 0) {
-        printw("Bind error!\n");
-        refresh();
+        printf("Bind error!\n");
+        
         return -1;
     }
-    printw("Server Started and is Listening...\n");
-    refresh();
+    printf("Server Started and is Listening...\n");
+    
     if (listen(s, 3) == -1) {
-        printw("Listen failed\n");
-        refresh();
+        printf("Listen failed\n");
+        
     }
     return s;
 }
 
 void *pintame(pFigura* fig1) {
     char buf[1023];
-    refresh();
+    
     while ((fig1->x_init != fig1->x_final) || (fig1->y_init != fig1->y_final)) {
 
-        printw("xinit %d\n", fig1->x_init);
-        printw("yinit %d\n", fig1->y_init);
-        printw("xfinal: %d\n", fig1->x_final);
-        printw("yfinal: %d\n", fig1->y_final);
-        refresh();
+        
+        printf("xinit %d\n", fig1->x_init);
+        printf("yinit %d\n", fig1->y_init);
+        printf("xfinal: %d\n", fig1->x_final);
+        printf("yfinal: %d\n", fig1->y_final);
+        
         serialize(fig1, buf);
+        //VALIDAR EL CASO CUANDO LA LISTAS ESTAN VACIAS, DEBE YA TENER LOS DOS SOCKETS CREADOS
+        //TENER CUIDADO CON QUE HAY QUE INICIALIZAR LAS LISTAS
+        //OPERACIOS CON LAS LISTAS
+        // HACER AGREGAR, ELIMINAR(CAMBIAR DE MONITOR O DESPUES DE ESTE WHILE) Y ACTUALIZAR(DESPUES DE CAMBIAR POSICION) SEGUN EL MONITOR QUE ESTE
+        //FALTA LA LOGICA QUE DECIDE A QUE MONITOR VA A PINTARSE Y SI TIENE QUE
+        //CAMBIAR DE MONITAR --> ELIMINARSE DE LA LISTA DE UN MONITOR Y ENTRAR 
+        //EN OTRO.
+        //VALIDAR LOS CHOQUES CON LAS LISTAS DE CADA MONITOR
         send(socket_monitor_1, buf, sizeof (buf), 0);
         fig1->x_init += (fig1->incre_x * fig1->dirx);
         fig1->y_init += (fig1->incre_y * fig1->diry);
@@ -45,7 +54,23 @@ void *pintame(pFigura* fig1) {
 
 
     }
-    //falta condicion de pintar el ultimo
+    /*Condicion de pintar el ultimp*/
+    printf("xinit %d\n", fig1->x_init);
+    printf("yinit %d\n", fig1->y_init);
+    printf("xfinal: %d\n", fig1->x_final);
+    printf("yfinal: %d\n", fig1->y_final);
+    
+    serialize(fig1, buf);
+    send(socket_monitor_1, buf, sizeof (buf), 0);
+    usleep(fig1->waitTime);
+    buf[0] = '\0';
+    
+    //La figura ya no debe aparecer mas y se
+    fig1->enable = 0;
+    serialize(fig1, buf);
+    send(socket_monitor_1, buf, sizeof (buf), 0);
+    
+    
     //NO SE PINTA MAS
     
 }
@@ -80,8 +105,8 @@ int listener(void*sock) {
 
     while (new_sock = accept(m_sock, (struct sockaddr*) &client, (socklen_t*) & c)) {
 
-        printw("Connection accepted.\n");
-        refresh();
+        printf("Connection accepted.\n");
+        
         break;
     }
     return new_sock;
@@ -89,16 +114,3 @@ int listener(void*sock) {
 
 
 
-
-//Terminal
-
-void show_ncurs() {
-    int row, col;
-    initscr();
-    raw();
-    keypad(stdscr, true);
-    //noecho();
-
-    getmaxyx(stdscr, row, col);
-
-}

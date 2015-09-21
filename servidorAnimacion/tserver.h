@@ -10,7 +10,6 @@
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <string.h>
-#include <ncurses.h>
 #include <pthread.h>
 #include <signal.h>
 #include "figura.h"
@@ -22,7 +21,7 @@
 
 #define DELAY 1000000
 
-void show_ncurs();
+
 int open_socket();
 void* pintame();
 int listener(void*sock);
