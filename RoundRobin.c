@@ -36,8 +36,15 @@ void scheduler() {
         if (TCBReadyQueue->size != 0 | sorted_threads->size!=0) {
             TCB* nextThread;
             if (flag == 0) {//TENER CUIDADO CON QUE TCBReadyQueue este vacia
-                nextThread = DequeueTCB(TCBReadyQueue);
-                flag=1;
+                //printf("lo ultimo que veo\n");
+                if (TCBReadyQueue->size == 0) {
+                    nextThread = sorted_threads->front->data;
+                    TCB_list_remove(sorted_threads, nextThread);
+                    flag = 1;
+                } else {
+                    nextThread = DequeueTCB(TCBReadyQueue);
+                    flag = 1;
+                }
             } else if(flag==1) {
                 if (sorted_threads->size == 0) {
                     nextThread = DequeueTCB(TCBReadyQueue);
