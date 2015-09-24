@@ -10,15 +10,17 @@ void initRoundRobin() {
     setupTimer(activador);
     next_threadID = 0;
     threadCounter = 0;
+    flag = 0;
     //Crear la cola de los hilos en estado ready
     TCBReadyQueue = TCB_queue_create();
     // Crear la lista de todos los hilos que no han finalizado
     all_threads = TCB_list_create();
     block_threads = TCB_list_create();
     wait_threads = TCB_list_create();
+    sorted_threads = TCB_list_create();
 
     ucontext_t current;
-    currentThread = TCB_create(0, &current, READY);
+    currentThread = TCB_create(0, &current, READY,1,0);
 }
 /*
  * EL calendarizador con RoundRobin
@@ -31,8 +33,26 @@ void scheduler() {
     if (!gotContext) {
         gotContext = 1;
         lockSignals();
-        if (TCBReadyQueue->size != 0) {
-            TCB* nextThread = DequeueTCB(TCBReadyQueue);
+        if (TCBReadyQueue->size != 0 | sorted_threads->size!=0) {
+            TCB* nextThread;
+            if (flag == 0) {//TENER CUIDADO CON QUE TCBReadyQueue este vacia
+                nextThread = DequeueTCB(TCBReadyQueue);
+                flag=1;
+            } else if(flag==1) {
+                if (sorted_threads->size == 0) {
+                    nextThread = DequeueTCB(TCBReadyQueue);
+                    flag=0;
+                    
+
+                } else if(sorted_threads->size > 0) {
+                    nextThread = sorted_threads->front->data;
+                    TCB_list_remove(sorted_threads, nextThread);
+                    flag=0;
+                    
+                }
+                
+
+            }
             ready(currentThread);
             currentThread = nextThread;
             currentThread->state = RUNNING;
@@ -49,14 +69,14 @@ void scheduler() {
 /*
  * Crear un nuevo contexto de tipo round robin
  */
-int crear(ucontext_t* newContext) {
+int crear(ucontext_t* newContext, int tipo, int tiquetes) {
 
    if (threadCounter + 1 > MAX_THREADS) // Maximum number of threads reached. We don't create the thread.
     {
         return ERROR;
     }
 
-    TCB* thread = TCB_create(threadCounter, newContext, READY);
+    TCB* thread = TCB_create(threadCounter, newContext, READY, tipo, tiquetes);
     if (thread == NULL) {
         return ERROR;
     }
@@ -73,6 +93,8 @@ int crear(ucontext_t* newContext) {
     
     /*Lo agrega en la cola con estado Ready*/
     thread->detached = 0;
+    thread->waitTime = 0;
+    thread->startTime = 0;
     int rdy =ready(thread);
     /*
      * Si el tamano de la cola Tread Control Block es uno, entonces inicializa
@@ -91,7 +113,14 @@ int crear(ucontext_t* newContext) {
  */
 int ready(TCB* thread) {
     lockSignals();
-    int could_enqueue = EnqueueTCB(TCBReadyQueue, thread);
+    int could_enqueue = 0;
+    if (thread->tipo == 1) {
+         could_enqueue = EnqueueTCB(TCBReadyQueue, thread);
+    }
+    else if (thread->tipo == 2){
+        could_enqueue = TCB_list_add(sorted_threads, thread);
+        
+    }
     unlockSignals();
     if (could_enqueue == ERROR) {
         return ERROR;
@@ -108,9 +137,32 @@ int ready(TCB* thread) {
 int despacharSiguienteHilo() {
 
     /*Primero lo saca de la cola*/
-    lockSignals();
-    TCB* thread = DequeueTCB(TCBReadyQueue);
-    unlockSignals();
+    TCB* thread;
+    if (flag == 0) {
+        lockSignals();
+        thread = DequeueTCB(TCBReadyQueue);
+        flag = 1;
+        unlockSignals();
+    } else if (flag == 1) {
+        if (sorted_threads->size == 0) {
+            lockSignals();
+            thread = DequeueTCB(TCBReadyQueue);
+            flag = 0;
+            unlockSignals();
+
+
+        } else if(sorted_threads->size > 0) {
+            lockSignals();
+            thread = sorted_threads->front->data;
+            TCB_list_remove(sorted_threads, thread);
+            flag = 0;
+            unlockSignals();
+        }
+
+
+
+    }
+    
     /*Valida si la cola esta vacia, es decir no hay ningun otro hilo, solo el 
      main*/
     currentThread = thread;
@@ -198,6 +250,7 @@ int wait(TCB* thread, double waitTime) {
     
 }
 int wakeupThreads(){
+    
     if(wait_threads->front == NULL){
         return 0;
     }
