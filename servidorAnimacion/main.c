@@ -1,5 +1,8 @@
 #include "tserver.h"
-
+#include "MyPthread/MyPthread.h"
+#include "MyPthread/MyMutex.h"
+#include "MyPthread/TCB.h"
+myMutex* mt;
 void sig_int(int signo)
 {       
         close(socket_monitor_1);
@@ -33,28 +36,23 @@ int main(int argc, char*argv[]){
 	}
         printf("ya cree todos los sockets\n");
         
+        my_thread_init();
+        my_mutex_init();
+        mt = my_mutex_create();
 
-        /*Crea las figuras del archivo de configuracion*/
-	pthread_t hilofigura1;
-	pFigura* fig1 = figura_create(1, 0, 0, 0, 1, 2, 1,2000000,10,1,1,1,50,5);
-	if ( pthread_create(&hilofigura1, NULL, pintame, (void*)fig1) < 0 ){
-			perror("Thread problem\n");
-			return 1;
-		}
-        pthread_t hilofigura2;
-        pFigura* fig2 = figura_create(2, 0, 5, 0, 3, 4, 1,3000000,10,1,1,1,50,10);
-	if ( pthread_create(&hilofigura2, NULL, pintame, (void*)fig2) < 0 ){
-			perror("Thread problem\n");
-			return 1;
-		}
+      
+	pFigura* fig1 = figura_create(1, 0, 0, 0, 1, 2, 1,2000,10,1,1,1,50,5);
+        int t1 =my_thread_create(pintame, 1, (void*)fig1);
+        
+        pFigura* fig2 = figura_create(2, 0, 5, 0, 3, 4, 1,3000,10,1,1,1,50,10);
+	int t2 = my_thread_create(pintame, 1, (void*)fig2);
     
 
-    	while(1);
+    	my_thread_join(t1);
+        my_thread_join(t2);
 		
-	
-	
-        close(socket_monitor_1);
-
+	close(socket_monitor_1);
+	printf("Exit\n");
 	exit(0);
 }
 

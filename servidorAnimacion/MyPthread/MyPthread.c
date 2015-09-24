@@ -16,7 +16,7 @@ void my_thread_init() {
     getcontext(main_context);
     if (!gotcontext) {
         gotcontext = 1;
-        main_tid = crear(main_context,1,0); // Creates main thread
+        main_tid = crear(main_context); // Creates main thread
         crearContextoDummy(); //Crea un proceso idle
         despacharSiguienteHilo();
 
@@ -32,14 +32,14 @@ void my_thread_detach(int thread_id){
  *Esta funcion crea el contexto del nuevo hilo y le asigna el contexto de fina-
  * lizacion para cuando el hilo termine, que ejecute ese contexto al finalizar.
  */
-int my_thread_create(void *(*function)(void *), int argc, void *arg, int tipo, int tiquetes) {
+int my_thread_create(void *(*function)(void *), int argc, void *arg) {
     ucontext_t* nuevoHilo = make_context(function, arg, contextoTerminal);
-    return crear(nuevoHilo,tipo,tiquetes);
+    return crear(nuevoHilo);
 }
 
 void crearContextoDummy(){
     contextoDummy = make_context(dummyFunction, 0, 0);
-    dummy_tid = crear(contextoDummy,1,0); // Creates dummy thread
+    dummy_tid = crear(contextoDummy); // Creates dummy thread
     despacharSiguienteHilo();
 }
 void *dummyFunction(void *x){

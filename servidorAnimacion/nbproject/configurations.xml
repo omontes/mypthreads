@@ -4,12 +4,34 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>MyPthread/ContextManage.h</itemPath>
+      <itemPath>MyPthread/Dispatcher.h</itemPath>
+      <itemPath>MyPthread/Mutex.h</itemPath>
+      <itemPath>MyPthread/MyMutex.h</itemPath>
+      <itemPath>MyPthread/MyPthread.h</itemPath>
+      <itemPath>MyPthread/Queue.h</itemPath>
+      <itemPath>MyPthread/RoundRobin.h</itemPath>
+      <itemPath>MyPthread/TCB.h</itemPath>
+      <itemPath>MyPthread/TCBQueue.h</itemPath>
+      <itemPath>MyPthread/TCB_list.h</itemPath>
+      <itemPath>MyPthread/Timer.h</itemPath>
       <itemPath>figura.h</itemPath>
       <itemPath>tserver.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>MyPthread/ContextManage.c</itemPath>
+      <itemPath>MyPthread/Dispatcher.c</itemPath>
+      <itemPath>MyPthread/Mutex.c</itemPath>
+      <itemPath>MyPthread/MyMutex.c</itemPath>
+      <itemPath>MyPthread/MyPthread.c</itemPath>
+      <itemPath>MyPthread/Queue.c</itemPath>
+      <itemPath>MyPthread/RoundRobin.c</itemPath>
+      <itemPath>MyPthread/TCB.c</itemPath>
+      <itemPath>MyPthread/TCB_Queue.c</itemPath>
+      <itemPath>MyPthread/TCB_list.c</itemPath>
+      <itemPath>MyPthread/Timer.c</itemPath>
       <itemPath>figura.c</itemPath>
       <itemPath>tserver.c</itemPath>
     </logicalFolder>
@@ -41,12 +63,55 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerOptionItem>-lncurses</linkerOptionItem>
             <linkerOptionItem>-lpthread</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>-lncurses -lpthread</commandLine>
+          <commandLine>-lpthread</commandLine>
         </linkerTool>
       </compileType>
+      <item path="MyPthread/ContextManage.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/ContextManage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/Dispatcher.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/Dispatcher.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/Mutex.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/Mutex.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/MyMutex.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/MyMutex.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/MyPthread.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/MyPthread.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/Queue.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/Queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/RoundRobin.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/RoundRobin.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/TCBQueue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB_Queue.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB_list.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB_list.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/Timer.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/Timer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="figura.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="figura.h" ex="false" tool="3" flavor2="0">
@@ -78,6 +143,50 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="MyPthread/ContextManage.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/ContextManage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/Dispatcher.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/Dispatcher.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/Mutex.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/Mutex.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/MyMutex.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/MyMutex.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/MyPthread.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/MyPthread.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/Queue.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/Queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/RoundRobin.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/RoundRobin.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/TCBQueue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB_Queue.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB_list.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/TCB_list.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MyPthread/Timer.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="MyPthread/Timer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="figura.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="figura.h" ex="false" tool="3" flavor2="0">

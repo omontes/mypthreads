@@ -63,8 +63,8 @@ int main(int argc, char** argv) {
     mt =my_mutex_create();
     
    
-    int t1= my_thread_create(shareProc, 1, NULL);
-    int t2= my_thread_create(shareProc, 1, NULL);
+    int t1= my_thread_create(shareProc, 1, NULL, 1, 0);
+    int t2= my_thread_create(shareProc, 1, NULL, 1, 0);
     
     //int t1= my_thread_create(proc1, 1, &proc1Limit);
     //int t2= my_thread_create(proc2, 1, &proc2Limit);

@@ -15,7 +15,7 @@
 #include "Dispatcher.h"
 #include "Mutex.h"
 void my_thread_end();
-int my_thread_create(void *(*function)(void *), int argc, void *arg, int tipo, int tiquetes);
+int my_thread_create(void *(*function)(void *), int argc, void *arg);
 void crearContextoFinalizacion();
 void my_thread_init();
 void my_thread_yield();

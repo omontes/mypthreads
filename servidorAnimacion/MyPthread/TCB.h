@@ -21,15 +21,13 @@ struct TCB_struct {
     State state;
     clock_t startTime;
     int detached;
-    int tiquetes;
-    int tipo;
     double waitTime;
     struct TCB_list_struct* waiting_for_me;
 };
 
 typedef struct TCB_struct TCB;
 
-TCB* TCB_create(int thread_id, ucontext_t* context, State state, int tipo, int tiquetes);
+TCB* TCB_create(int thread_id, ucontext_t* context, State state);
 int TCB_equals(TCB* t1, TCB* t2);
 int TCB_block(TCB* waiting_thread, TCB* blocking_thread);
 int TCB_unblock(TCB* waiting_thread, TCB* blocking_thread);

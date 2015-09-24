@@ -13,7 +13,7 @@
 #include <pthread.h>
 #include <signal.h>
 #include "figura.h"
-
+#include "MyPthread/MyPthread.h"
 #include <unistd.h>
 
 #ifndef TSERVER_H

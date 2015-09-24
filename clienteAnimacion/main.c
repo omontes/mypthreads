@@ -32,8 +32,7 @@ int main(int argc, char*argv[]){
         while(1){
             
                 //recibir datos del server
-		num=recv(sock,buf,1023,0);
-                           
+		num=recv(sock,buf,1023,0);                         
                 
                 
 		buf[num]='\0';

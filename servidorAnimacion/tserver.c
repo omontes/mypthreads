@@ -47,7 +47,7 @@ void *pintame(pFigura* fig1) {
         send(socket_monitor_1, buf, sizeof (buf), 0);
         fig1->x_init += (fig1->incre_x * fig1->dirx);
         fig1->y_init += (fig1->incre_y * fig1->diry);
-        usleep(fig1->waitTime);
+        my_thread_wait(fig1->waitTime);
         buf[0] = '\0';
 
 
@@ -62,7 +62,7 @@ void *pintame(pFigura* fig1) {
     
     serialize(fig1, buf);
     send(socket_monitor_1, buf, sizeof (buf), 0);
-    usleep(fig1->waitTime);
+    my_thread_wait(fig1->waitTime);
     buf[0] = '\0';
     
     //La figura ya no debe aparecer mas y se

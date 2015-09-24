@@ -22,7 +22,7 @@
 
 void initRoundRobin();
 void scheduler();
-int crear(ucontext_t* newcontext, int tipo, int tiquetes);
+int crear(ucontext_t* newcontext);
 int ready(TCB* thread);
 int despacharSiguienteHilo();
 
@@ -37,9 +37,7 @@ TCB*	Find_TCB(int tid);
 int	No_threads_beside_main();
 int wakeupThreads();
 int wait(TCB* thread, double waitTime);
-int flag;
 
-TCB_list* sorted_threads;
 TCB* currentThread;
 TCB_list* all_threads; // Contiene todos los hilos que no han finalizado
 TCB_list* block_threads; // Contiene todos los hilos que esten bloqueados

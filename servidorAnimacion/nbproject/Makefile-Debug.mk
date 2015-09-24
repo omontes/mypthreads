@@ -35,6 +35,17 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/MyPthread/ContextManage.o \
+	${OBJECTDIR}/MyPthread/Dispatcher.o \
+	${OBJECTDIR}/MyPthread/Mutex.o \
+	${OBJECTDIR}/MyPthread/MyMutex.o \
+	${OBJECTDIR}/MyPthread/MyPthread.o \
+	${OBJECTDIR}/MyPthread/Queue.o \
+	${OBJECTDIR}/MyPthread/RoundRobin.o \
+	${OBJECTDIR}/MyPthread/TCB.o \
+	${OBJECTDIR}/MyPthread/TCB_Queue.o \
+	${OBJECTDIR}/MyPthread/TCB_list.o \
+	${OBJECTDIR}/MyPthread/Timer.o \
 	${OBJECTDIR}/figura.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/tserver.o
@@ -54,7 +65,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lncurses -lpthread
+LDLIBSOPTIONS=-lpthread
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -62,7 +73,62 @@ LDLIBSOPTIONS=-lncurses -lpthread
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servidoranimacion: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servidoranimacion ${OBJECTFILES} ${LDLIBSOPTIONS} -lncurses -lpthread
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servidoranimacion ${OBJECTFILES} ${LDLIBSOPTIONS} -lpthread
+
+${OBJECTDIR}/MyPthread/ContextManage.o: MyPthread/ContextManage.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/ContextManage.o MyPthread/ContextManage.c
+
+${OBJECTDIR}/MyPthread/Dispatcher.o: MyPthread/Dispatcher.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/Dispatcher.o MyPthread/Dispatcher.c
+
+${OBJECTDIR}/MyPthread/Mutex.o: MyPthread/Mutex.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/Mutex.o MyPthread/Mutex.c
+
+${OBJECTDIR}/MyPthread/MyMutex.o: MyPthread/MyMutex.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/MyMutex.o MyPthread/MyMutex.c
+
+${OBJECTDIR}/MyPthread/MyPthread.o: MyPthread/MyPthread.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/MyPthread.o MyPthread/MyPthread.c
+
+${OBJECTDIR}/MyPthread/Queue.o: MyPthread/Queue.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/Queue.o MyPthread/Queue.c
+
+${OBJECTDIR}/MyPthread/RoundRobin.o: MyPthread/RoundRobin.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/RoundRobin.o MyPthread/RoundRobin.c
+
+${OBJECTDIR}/MyPthread/TCB.o: MyPthread/TCB.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/TCB.o MyPthread/TCB.c
+
+${OBJECTDIR}/MyPthread/TCB_Queue.o: MyPthread/TCB_Queue.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/TCB_Queue.o MyPthread/TCB_Queue.c
+
+${OBJECTDIR}/MyPthread/TCB_list.o: MyPthread/TCB_list.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/TCB_list.o MyPthread/TCB_list.c
+
+${OBJECTDIR}/MyPthread/Timer.o: MyPthread/Timer.c 
+	${MKDIR} -p ${OBJECTDIR}/MyPthread
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread/Timer.o MyPthread/Timer.c
 
 ${OBJECTDIR}/figura.o: figura.c 
 	${MKDIR} -p ${OBJECTDIR}
