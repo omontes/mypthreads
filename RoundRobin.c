@@ -38,6 +38,8 @@ void scheduler() {
             if (flag == 0) {//TENER CUIDADO CON QUE TCBReadyQueue este vacia
                 //printf("lo ultimo que veo\n");
                 if (TCBReadyQueue->size == 0) {
+                    int nextTiquete=obtenerMaximoTiquetes();
+                    printf("nexttiquete: %d\n",nextTiquete);
                     nextThread = sorted_threads->front->data;
                     TCB_list_remove(sorted_threads, nextThread);
                     flag = 1;
@@ -52,6 +54,8 @@ void scheduler() {
                     
 
                 } else if(sorted_threads->size > 0) {
+                    int nextTiquete=obtenerMaximoTiquetes();
+                    printf("nexttiquete: %d\n",nextTiquete);
                     nextThread = sorted_threads->front->data;
                     TCB_list_remove(sorted_threads, nextThread);
                     flag=0;
@@ -113,6 +117,18 @@ int crear(ucontext_t* newContext, int tipo, int tiquetes) {
     
     return rdy;
    
+}
+int obtenerMaximoTiquetes(){
+    TCB_list_node* pointer = sorted_threads->front;
+    int tiquetes = 0;
+    while(pointer != NULL)
+    {
+        TCB* thread =pointer->data;
+        tiquetes+=thread->tiquetes;
+        
+        pointer = pointer->next;
+    }
+    return rand()%tiquetes;
 }
 /*
  * Agrega a la cola el thread y lo pone en estado Ready, devuelde el estado 
