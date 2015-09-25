@@ -16,7 +16,7 @@ void *proc1(void *x) {
             printf("Finalizo T1 por end\n");
             my_thread_end();*/
             printf("Yield de T1\n");
-            sleep(5);
+            my_thread_wait(5000);
             my_thread_yield();
         }
         printf("N1:%d\n", n1--);
@@ -35,7 +35,7 @@ void *proc2(void *x) {
         printf("N2:%d\n", n2--);
     }
     printf("Finalizo T2\n");
-    sleep(8);
+    my_thread_wait(8000);
     
 
 }
@@ -55,28 +55,27 @@ int main(int argc, char** argv) {
 
     share = 10;
 
-    //int proc1Limit = 25;
-    //int proc2Limit = 5;
+    int proc1Limit = 25;
+    int proc2Limit = 5;
 
     my_thread_init();
     my_mutex_init();
     mt =my_mutex_create();
     
    
-    int t1= my_thread_create(shareProc, 1, NULL, 1, 75);
-    int t2= my_thread_create(shareProc, 1, NULL, 1, 35);
-    int t3= my_thread_create(shareProc, 1, NULL, 1, 55);
+    /*int t1= my_thread_create(shareProc, 1, NULL, 2, 75);
+    int t2= my_thread_create(shareProc, 1, NULL, 2, 35);
+    int t3= my_thread_create(shareProc, 1, NULL, 2, 55);*/
     
-    //int t1= my_thread_create(proc1, 1, &proc1Limit);
-    //int t2= my_thread_create(proc2, 1, &proc2Limit);
+    int t1= my_thread_create(proc1, 1, &proc1Limit,2,100);
+    int t2= my_thread_create(proc2, 1, &proc2Limit,2,20);
     
     //my_thread_detach(t1);
     //my_thread_detach(t2);
-    /*TCB* nextThread=obtenerMaximoTiquetes();
-    printf("nextThread: %d\n",nextThread->thread_id);*/
+   
     my_thread_join(t1);
     my_thread_join(t2);
-    my_thread_join(t3);
+    //my_thread_join(t3);
     printf("Main termino\n");
 
     return (EXIT_SUCCESS);

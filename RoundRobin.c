@@ -38,8 +38,6 @@ void scheduler() {
             if (flag == 0) {//TENER CUIDADO CON QUE TCBReadyQueue este vacia
                 //printf("lo ultimo que veo\n");
                 if (TCBReadyQueue->size == 0) {
-                    //TCB* nextThread2 = obtenerMaximoTiquetes();
-                    //printf("nextThread: %d\n", nextThread2->thread_id);
                     nextThread = obtenerMaximoTiquetes();
                     TCB_list_remove(sorted_threads, nextThread);
                     flag = 1;
@@ -54,8 +52,6 @@ void scheduler() {
                     
 
                 } else if(sorted_threads->size > 0) {
-                    /*TCB* nextThread2 = obtenerMaximoTiquetes();
-                    printf("nextThread: %d\n", nextThread2->thread_id);*/
                     nextThread = obtenerMaximoTiquetes();
                     TCB_list_remove(sorted_threads, nextThread);
                     flag=0;
@@ -118,6 +114,12 @@ int crear(ucontext_t* newContext, int tipo, int tiquetes) {
     return rdy;
    
 }
+/*
+ * Esta funcion encuentra utilizando un aproximado de la funcion rand() el hilo
+ * que tenga mas tiquetes. Entonces tiene mas posibilidad de escoger el hilo
+ * que tiene mas tiquetes. Primero encuentra el valor total de tiquetes y luego
+ * con base a ese random hasta ese valor encuentra cual es el hilo favorecido.
+ */
 TCB* obtenerMaximoTiquetes(){
     if(sorted_threads->size == 1){
         return sorted_threads->front->data;
@@ -133,9 +135,6 @@ TCB* obtenerMaximoTiquetes(){
         pointer = pointer->next;
     }
     int maximoTiquetes=rand()%totalTiquetes;
-    printf("total tiquets: %d\n",totalTiquetes);
-    printf("cantidad hilos: %d\n",sorted_threads->size);
-    printf("random tiquets: %d\n",maximoTiquetes);
     /*Vuelve a recorrer la lista para elegir el ganador*/
     pointer = sorted_threads->front;
     TCB* thread = (TCB*) malloc(sizeof (TCB));
@@ -143,15 +142,13 @@ TCB* obtenerMaximoTiquetes(){
     while(pointer != NULL)
     {
         TCB* thread =pointer->data;
-        printf("id candidato: %d\n",thread->thread_id);
-        
         if(maximoTiquetes <= (thread->tiquetes + tiquetesAcumulados))
             return thread;
         tiquetesAcumulados = thread->tiquetes;
         pointer = pointer->next;
         
     }
-    printf("llegue aqui\n");
+    printf("Si llega aqui es un error\n");
     return thread;
     
 }
