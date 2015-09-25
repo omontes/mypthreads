@@ -38,9 +38,9 @@ void scheduler() {
             if (flag == 0) {//TENER CUIDADO CON QUE TCBReadyQueue este vacia
                 //printf("lo ultimo que veo\n");
                 if (TCBReadyQueue->size == 0) {
-                    int nextTiquete=obtenerMaximoTiquetes();
-                    printf("nexttiquete: %d\n",nextTiquete);
-                    nextThread = sorted_threads->front->data;
+                    //TCB* nextThread2 = obtenerMaximoTiquetes();
+                    //printf("nextThread: %d\n", nextThread2->thread_id);
+                    nextThread = obtenerMaximoTiquetes();
                     TCB_list_remove(sorted_threads, nextThread);
                     flag = 1;
                 } else {
@@ -54,9 +54,9 @@ void scheduler() {
                     
 
                 } else if(sorted_threads->size > 0) {
-                    int nextTiquete=obtenerMaximoTiquetes();
-                    printf("nexttiquete: %d\n",nextTiquete);
-                    nextThread = sorted_threads->front->data;
+                    /*TCB* nextThread2 = obtenerMaximoTiquetes();
+                    printf("nextThread: %d\n", nextThread2->thread_id);*/
+                    nextThread = obtenerMaximoTiquetes();
                     TCB_list_remove(sorted_threads, nextThread);
                     flag=0;
                     
@@ -82,7 +82,7 @@ void scheduler() {
  */
 int crear(ucontext_t* newContext, int tipo, int tiquetes) {
 
-   if (threadCounter + 1 > MAX_THREADS) // Maximum number of threads reached. We don't create the thread.
+   if (threadCounter + 1 > MAX_THREADS) 
     {
         return ERROR;
     }
@@ -118,17 +118,42 @@ int crear(ucontext_t* newContext, int tipo, int tiquetes) {
     return rdy;
    
 }
-int obtenerMaximoTiquetes(){
+TCB* obtenerMaximoTiquetes(){
+    if(sorted_threads->size == 1){
+        return sorted_threads->front->data;
+    }
     TCB_list_node* pointer = sorted_threads->front;
-    int tiquetes = 0;
+    int totalTiquetes = 0;
+    /*Suma el total de tiquetes*/
     while(pointer != NULL)
     {
         TCB* thread =pointer->data;
-        tiquetes+=thread->tiquetes;
+        totalTiquetes+=thread->tiquetes;
         
         pointer = pointer->next;
     }
-    return rand()%tiquetes;
+    int maximoTiquetes=rand()%totalTiquetes;
+    printf("total tiquets: %d\n",totalTiquetes);
+    printf("cantidad hilos: %d\n",sorted_threads->size);
+    printf("random tiquets: %d\n",maximoTiquetes);
+    /*Vuelve a recorrer la lista para elegir el ganador*/
+    pointer = sorted_threads->front;
+    TCB* thread = (TCB*) malloc(sizeof (TCB));
+    int tiquetesAcumulados=0;
+    while(pointer != NULL)
+    {
+        TCB* thread =pointer->data;
+        printf("id candidato: %d\n",thread->thread_id);
+        
+        if(maximoTiquetes <= (thread->tiquetes + tiquetesAcumulados))
+            return thread;
+        tiquetesAcumulados = thread->tiquetes;
+        pointer = pointer->next;
+        
+    }
+    printf("llegue aqui\n");
+    return thread;
+    
 }
 /*
  * Agrega a la cola el thread y lo pone en estado Ready, devuelde el estado 

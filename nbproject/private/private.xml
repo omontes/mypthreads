@@ -11,14 +11,7 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/oscar/NetBeansProjects/MyPthreads/Main.c</file>
-            <file>file:/home/oscar/NetBeansProjects/MyPthreads/TCB.h</file>
-            <file>file:/home/oscar/NetBeansProjects/MyPthreads/Dispatcher.c</file>
-            <file>file:/home/oscar/NetBeansProjects/MyPthreads/MyPthread.h</file>
-            <file>file:/home/oscar/NetBeansProjects/MyPthreads/RoundRobin.h</file>
-            <file>file:/home/oscar/NetBeansProjects/MyPthreads/TCB_list.c</file>
-            <file>file:/home/oscar/NetBeansProjects/MyPthreads/TCB.c</file>
             <file>file:/home/oscar/NetBeansProjects/MyPthreads/RoundRobin.c</file>
-            <file>file:/home/oscar/NetBeansProjects/MyPthreads/MyPthread.c</file>
         </group>
     </open-files>
 </project-private>

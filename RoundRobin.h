@@ -49,6 +49,7 @@ TCB_queue *TCBReadyQueue; // Contiene todos los hilos en estado ready
 int next_threadID; 
 // Cuenta cuantos hilos existen en un determinado tiempo
 int threadCounter; 
+TCB* obtenerMaximoTiquetes();
 
 #endif	/* ROUNDROBIN_H */
 
