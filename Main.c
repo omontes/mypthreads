@@ -40,13 +40,13 @@ void *proc2(void *x) {
 
 }
 void *shareProc(void *x) {
-    my_mutex_block(mt);
+    //my_mutex_block(mt);
     while (share > 0) {
-        printf("N:%d\n",share);
+        printf("N:%d con hilo%d\n",share,getRunningContext()->thread_id);
         share--;
         my_thread_wait(1000);//Espera un segundo
     }
-    my_mutex_unblock(mt);
+    //my_mutex_unblock(mt);
     share = 10;
 
 }
@@ -63,17 +63,20 @@ int main(int argc, char** argv) {
     mt =my_mutex_create();
     
    
-    int t1= my_thread_create(shareProc, 1, NULL, 1, 0);
-    int t2= my_thread_create(shareProc, 1, NULL, 1, 0);
+    int t1= my_thread_create(shareProc, 1, NULL, 1, 75);
+    int t2= my_thread_create(shareProc, 1, NULL, 1, 35);
+    int t3= my_thread_create(shareProc, 1, NULL, 1, 55);
     
     //int t1= my_thread_create(proc1, 1, &proc1Limit);
     //int t2= my_thread_create(proc2, 1, &proc2Limit);
     
     //my_thread_detach(t1);
     //my_thread_detach(t2);
-    
-    //my_thread_join(t1);
+    /*TCB* nextThread=obtenerMaximoTiquetes();
+    printf("nextThread: %d\n",nextThread->thread_id);*/
+    my_thread_join(t1);
     my_thread_join(t2);
+    my_thread_join(t3);
     printf("Main termino\n");
 
     return (EXIT_SUCCESS);
