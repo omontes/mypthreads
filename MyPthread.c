@@ -40,7 +40,7 @@ int my_thread_create(void *(*function)(void *), int argc, void *arg, int tipo, i
 void crearContextoDummy(){
     contextoDummy = make_context(dummyFunction, 0, 0);
     dummy_tid = crear(contextoDummy,1,0); // Creates dummy thread
-    despacharSiguienteHilo();
+    
 }
 void *dummyFunction(void *x){
     while(1);
@@ -56,6 +56,7 @@ void crearContextoFinalizacion() {
  */
 void my_thread_end(void *x) {
     TCB* thread = getRunningContext();
+    //printf("termino el hilo num: %d\n",thread->thread_id);
     Kill(thread);
     despacharSiguienteHilo();
 
@@ -109,12 +110,12 @@ int my_thread_join(int waited_thread_tid)
 
 	if(TCB_is_blocked(this_thread)) // Stop thread only if thread is blocked.
 	{
-                //printf("antes de main termino\n");
+                //printf("mando ejecutarS por join de hilo num %d\n",waited_thread_tid);
 		return despacharSiguienteHilo();
 	}
 	else // If thread isn't blocked, we're returning to this point via context switching: we don't stop the thread, just return.
 	{
-                printf("ya el thread no esta bloqueado\n");
+                //printf("ya el thread no esta bloqueado\n");
 		return NO_ERROR;
 	}
 }
@@ -126,6 +127,7 @@ void my_thread_wait(double segundos){
         gotContext = 1;
         //printf("espa el hilo numero: %d\n",wait_thread->thread_id);
         wait(wait_thread, segundos);
+        //printf("mando ejecutarS por wait de hilo num %d \n",wait_thread->thread_id);
         despacharSiguienteHilo();
     }
     
@@ -155,6 +157,7 @@ void my_mutex_block(myMutex* mt){
             TCB_list_add(block_threads, current_thread);
             TCB_list_add(mt->lockThreads, current_thread);
             //printf("el tamano de mt :%d\n",mt->lockThreads->size);
+            //printf("mando ejecutarS por block num %d \n",current_thread->thread_id);
             despacharSiguienteHilo();
             
         }

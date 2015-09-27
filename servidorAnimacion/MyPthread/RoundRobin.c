@@ -10,15 +10,17 @@ void initRoundRobin() {
     setupTimer(activador);
     next_threadID = 0;
     threadCounter = 0;
+    flag = 0;
     //Crear la cola de los hilos en estado ready
     TCBReadyQueue = TCB_queue_create();
     // Crear la lista de todos los hilos que no han finalizado
     all_threads = TCB_list_create();
     block_threads = TCB_list_create();
     wait_threads = TCB_list_create();
+    sorted_threads = TCB_list_create();
 
     ucontext_t current;
-    currentThread = TCB_create(0, &current, READY);
+    currentThread = TCB_create(0, &current, READY,1,0);
 }
 /*
  * EL calendarizador con RoundRobin
@@ -31,16 +33,55 @@ void scheduler() {
     if (!gotContext) {
         gotContext = 1;
         lockSignals();
-        if (TCBReadyQueue->size != 0) {
-            TCB* nextThread = DequeueTCB(TCBReadyQueue);
+        if (TCBReadyQueue->size != 0 | sorted_threads->size!=0) {
+            TCB* nextThread = (TCB*)malloc(sizeof(TCB));
+            if (flag == 0) {//TENER CUIDADO CON QUE TCBReadyQueue este vacia
+                //printf("lo ultimo que veo\n");
+                if (TCBReadyQueue->size == 0) {
+                    //printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
+                    nextThread = obtenerMaximoTiquetes();
+                    //printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
+                    TCB_list_remove(sorted_threads, nextThread);
+                    flag = 1;
+                } else {
+                    //printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
+                    nextThread = DequeueTCB(TCBReadyQueue);
+                    //printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
+                    flag = 1;
+                }
+            } else if(flag==1) {
+                if (sorted_threads->size == 0) {
+                    
+                    //printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
+                    //printf("no tengo hilos de sorteo\n");
+                    nextThread = DequeueTCB(TCBReadyQueue);
+                    //printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
+                    flag=0;
+                    
+
+                } else if(sorted_threads->size > 0) {
+                    //printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
+                    nextThread = obtenerMaximoTiquetes();
+                    //printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
+                    TCB_list_remove(sorted_threads, nextThread);
+                    flag=0;
+                    
+                }
+                
+
+            }
+            
             ready(currentThread);
             currentThread = nextThread;
             currentThread->state = RUNNING;
-            unlockSignals();
+            //printf("hilo num ejecutandose: %d\n",nextThread->thread_id);
+            wakeupThreads();
             dispatch(nextThread);
+            unlockSignals();
             
         }
         else{
+            //printf("ciclado\n");
             wakeupThreads();
             dispatch(runningThread);
         }
@@ -49,14 +90,14 @@ void scheduler() {
 /*
  * Crear un nuevo contexto de tipo round robin
  */
-int crear(ucontext_t* newContext) {
+int crear(ucontext_t* newContext, int tipo, int tiquetes) {
 
-   if (threadCounter + 1 > MAX_THREADS) // Maximum number of threads reached. We don't create the thread.
+   if (threadCounter + 1 > MAX_THREADS) 
     {
         return ERROR;
     }
 
-    TCB* thread = TCB_create(threadCounter, newContext, READY);
+    TCB* thread = TCB_create(threadCounter, newContext, READY, tipo, tiquetes);
     if (thread == NULL) {
         return ERROR;
     }
@@ -73,6 +114,8 @@ int crear(ucontext_t* newContext) {
     
     /*Lo agrega en la cola con estado Ready*/
     thread->detached = 0;
+    thread->waitTime = 0;
+    thread->startTime = 0;
     int rdy =ready(thread);
     /*
      * Si el tamano de la cola Tread Control Block es uno, entonces inicializa
@@ -86,12 +129,58 @@ int crear(ucontext_t* newContext) {
    
 }
 /*
+ * Esta funcion encuentra utilizando un aproximado de la funcion rand() el hilo
+ * que tenga mas tiquetes. Entonces tiene mas posibilidad de escoger el hilo
+ * que tiene mas tiquetes. Primero encuentra el valor total de tiquetes y luego
+ * con base a ese random hasta ese valor encuentra cual es el hilo favorecido.
+ */
+TCB* obtenerMaximoTiquetes(){
+    if(sorted_threads->size == 1){
+        return sorted_threads->front->data;
+    }
+    TCB_list_node* pointer = sorted_threads->front;
+    int totalTiquetes = 0;
+    /*Suma el total de tiquetes*/
+    while(pointer != NULL)
+    {
+        TCB* thread =pointer->data;
+        totalTiquetes+=thread->tiquetes;
+        
+        pointer = pointer->next;
+    }
+    int maximoTiquetes=rand()%totalTiquetes;
+    /*Vuelve a recorrer la lista para elegir el ganador*/
+    pointer = sorted_threads->front;
+    TCB* thread = (TCB*) malloc(sizeof (TCB));
+    int tiquetesAcumulados=0;
+    while(pointer != NULL)
+    {
+        TCB* thread =pointer->data;
+        if(maximoTiquetes <= (thread->tiquetes + tiquetesAcumulados))
+            return thread;
+        tiquetesAcumulados = thread->tiquetes;
+        pointer = pointer->next;
+        
+    }
+    //printf("Si llega aqui es un error\n");
+    return thread;
+    
+}
+/*
  * Agrega a la cola el thread y lo pone en estado Ready, devuelde el estado 
  * si fue exitoso el procedimeinto.
  */
 int ready(TCB* thread) {
     lockSignals();
-    int could_enqueue = EnqueueTCB(TCBReadyQueue, thread);
+    int could_enqueue = 0;
+    if (thread->tipo == 1) {
+         could_enqueue = EnqueueTCB(TCBReadyQueue, thread);
+    }
+    else if (thread->tipo == 2){
+        //printf("meti al hilo numero: %d\n",thread->thread_id);
+        could_enqueue = TCB_list_add(sorted_threads, thread);
+        
+    }
     unlockSignals();
     if (could_enqueue == ERROR) {
         return ERROR;
@@ -108,9 +197,39 @@ int ready(TCB* thread) {
 int despacharSiguienteHilo() {
 
     /*Primero lo saca de la cola*/
-    lockSignals();
-    TCB* thread = DequeueTCB(TCBReadyQueue);
-    unlockSignals();
+    TCB* thread = (TCB*)malloc(sizeof(TCB));
+    if (flag == 0) {
+        lockSignals();
+        
+        thread = DequeueTCB(TCBReadyQueue);
+        //printf("hilo que se esta ejecutando: %d\n",currentThread->thread_id);
+        //printf("hilo que se va a ejecutar: %d\n",thread->thread_id);
+        flag = 1;
+        unlockSignals();
+    } else if (flag == 1) {
+        if (sorted_threads->size == 0) {
+            lockSignals();
+            thread = DequeueTCB(TCBReadyQueue);
+            //printf("hilo que se esta ejecutando: %d\n",currentThread->thread_id);
+            //printf("hilo que se va a ejecutar: %d\n",thread->thread_id);
+            flag = 0;
+            unlockSignals();
+
+
+        } else if(sorted_threads->size > 0) {
+            lockSignals();
+            thread = obtenerMaximoTiquetes();
+            //printf("hilo que se esta ejecutando: %d\n",currentThread->thread_id);
+            //printf("hilo que se va a ejecutar: %d\n",thread->thread_id);
+            TCB_list_remove(sorted_threads, thread);
+            flag = 0;
+            unlockSignals();
+        }
+
+
+
+    }
+    
     /*Valida si la cola esta vacia, es decir no hay ningun otro hilo, solo el 
      main*/
     currentThread = thread;
@@ -198,6 +317,7 @@ int wait(TCB* thread, double waitTime) {
     
 }
 int wakeupThreads(){
+    
     if(wait_threads->front == NULL){
         return 0;
     }

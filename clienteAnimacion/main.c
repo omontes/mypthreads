@@ -12,7 +12,7 @@ int main(int argc, char*argv[]){
         //Coneccion con el servidor
 	struct sockaddr_in saddr;
 	saddr.sin_family=AF_INET;
-	saddr.sin_port=htons(1020);
+	saddr.sin_port=htons(1021);
 	saddr.sin_addr.s_addr=inet_addr("127.0.0.1");
 	int sock;
 	if((sock=socket(PF_INET,SOCK_STREAM,0))==-1){

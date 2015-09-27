@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-TCB* TCB_create(int tid, ucontext_t* context, State state) {
+TCB* TCB_create(int tid, ucontext_t* context, State state, int tipo, int tiquetes) {
     TCB* t = (TCB*) malloc(sizeof (TCB));
     if (t == NULL) {
         return NULL;
@@ -11,6 +11,8 @@ TCB* TCB_create(int tid, ucontext_t* context, State state) {
         t->thread_id = tid;
         t->context = context;
         t->state = state;
+        t->tiquetes = tiquetes;
+        t->tipo = tipo;        
         t->waiting_for_me = TCB_list_create();
         return t;
     }

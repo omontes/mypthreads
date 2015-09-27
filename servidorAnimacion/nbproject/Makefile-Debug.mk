@@ -47,7 +47,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/MyPthread/TCB_list.o \
 	${OBJECTDIR}/MyPthread/Timer.o \
 	${OBJECTDIR}/figura.o \
-	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/list.o \
+	${OBJECTDIR}/main_servidor.o \
 	${OBJECTDIR}/tserver.o
 
 
@@ -135,10 +136,15 @@ ${OBJECTDIR}/figura.o: figura.c
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/figura.o figura.c
 
-${OBJECTDIR}/main.o: main.c 
+${OBJECTDIR}/list.o: list.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.c
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/list.o list.c
+
+${OBJECTDIR}/main_servidor.o: main_servidor.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main_servidor.o main_servidor.c
 
 ${OBJECTDIR}/tserver.o: tserver.c 
 	${MKDIR} -p ${OBJECTDIR}

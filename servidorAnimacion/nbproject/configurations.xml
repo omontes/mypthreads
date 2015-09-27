@@ -16,6 +16,7 @@
       <itemPath>MyPthread/TCB_list.h</itemPath>
       <itemPath>MyPthread/Timer.h</itemPath>
       <itemPath>figura.h</itemPath>
+      <itemPath>list.h</itemPath>
       <itemPath>tserver.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -33,12 +34,13 @@
       <itemPath>MyPthread/TCB_list.c</itemPath>
       <itemPath>MyPthread/Timer.c</itemPath>
       <itemPath>figura.c</itemPath>
+      <itemPath>list.c</itemPath>
       <itemPath>tserver.c</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>main.c</itemPath>
+      <itemPath>main_servidor.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -116,7 +118,11 @@
       </item>
       <item path="figura.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="main.c" ex="false" tool="0" flavor2="0">
+      <item path="list.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="list.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main_servidor.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tserver.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -191,7 +197,11 @@
       </item>
       <item path="figura.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="main.c" ex="false" tool="0" flavor2="0">
+      <item path="list.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="list.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main_servidor.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tserver.c" ex="false" tool="0" flavor2="0">
       </item>
