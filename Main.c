@@ -8,34 +8,34 @@ int share;
 myMutex* mt;
 void *proc1(void *x) {
 
-    int n1 = *((int *) x);
-    while (n1 > 0) {
-        if(n1==5){
-            printf("N1:%d\n", n1);
+    int n2 = *((int *) x);
+    while (n2 > 0) {
+        if(n2==5){
+            printf("N2:%d\n", n2);
             /*my_thread_wait(2000000);
             printf("Finalizo T1 por end\n");
             my_thread_end();*/
-            printf("Yield de T1\n");
+            //printf("Yield de T1\n");
             my_thread_wait(5000);
-            my_thread_yield();
+            //my_thread_yield();
         }
-        printf("N1:%d\n", n1--);
+        printf("N2:%d\n", n2--);
     }
-    printf("Finalizo T1\n");
+    printf("Finalizo hilo 2\n");
 }
 
 void *proc2(void *x) {
 
-    int n2 = *((int *) x);
-    while (n2 > 0) {
-        if(n2==3){
-            printf("Yield de T2\n");
-            my_thread_yield();
-        }
-        printf("N2:%d\n", n2--);
+    int n3 = *((int *) x);
+    while (n3 > 0) {
+        /*if(n2==3){
+            //printf("Yield de T2\n");
+            //my_thread_yield();
+        }*/
+        printf("N3:%d\n", n3--);
     }
-    printf("Finalizo T2\n");
-    my_thread_wait(8000);
+    printf("Finalizo hilo 3\n");
+    my_thread_wait(2000);
     
 
 }
@@ -67,8 +67,8 @@ int main(int argc, char** argv) {
     int t2= my_thread_create(shareProc, 1, NULL, 2, 100);//id3
     int t3= my_thread_create(shareProc, 1, NULL, 1, 0);//id4*/
     
-    int t1= my_thread_create(proc1, 1, &proc1Limit,1,0);
-    int t2= my_thread_create(proc2, 1, &proc2Limit,1,0);
+    int t1= my_thread_create(proc1, 1, &proc1Limit,1,0);//id2
+    int t2= my_thread_create(proc2, 1, &proc2Limit,1,0);//id3
     
   
     //my_thread_detach(t1);

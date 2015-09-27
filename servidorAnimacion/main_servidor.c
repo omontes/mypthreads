@@ -60,13 +60,12 @@ int main(int argc, char*argv[]){
         //int t3 = my_thread_create(pintame, 1, (void*)fig3,1,0);
         
   
-    	my_thread_join(t1);
-        my_thread_join(t2);
+    	while(1);
         //my_thread_join(t3);
        
        
 		
-	close(socket_monitor_1);
+	//close(socket_monitor_1);
         //close(socket_monitor_2);
 	printf("Exit\n");
 	exit(0);

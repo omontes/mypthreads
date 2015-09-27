@@ -316,27 +316,31 @@ int wait(TCB* thread, double waitTime) {
     }
     
 }
-int wakeupThreads(){
-    
-    if(wait_threads->front == NULL){
+
+int wakeupThreads() {
+
+    if (wait_threads->front == NULL) {
         return 0;
     }
-    lockSignals();
-    TCB* thread =wait_threads->front->data;
-    unlockSignals();
-    if (thread->state == BLOCKED) {
-        clock_t end;
-        double total;
-        end = clock();
-        total = (end - thread->startTime) / (double) 1000;
-        if (total > thread->waitTime) {
-            TCB_list_remove(wait_threads,thread);
-            ready(thread);
-            return 1;
+    TCB_list_node* pointer = wait_threads->front;
+    while (pointer != NULL) {
+        TCB* thread = pointer->data;
+        if (thread->state == BLOCKED) {
+            clock_t end;
+            double total;
+            end = clock();
+            total = (end - thread->startTime) / (double) 1000;
+            if (total > thread->waitTime) {
+                printf("el tiempo total es: %f\n", total);
+                TCB_list_remove(wait_threads, thread);
+                ready(thread);
+                return 1;
+            }
         }
+        pointer = pointer->next;
     }
-    
-    
+
+
 }
 
 
