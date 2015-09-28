@@ -66,7 +66,9 @@ int listener(void*sock) {
 
 
 void *pintame(pFigura* fig) {
-
+    if(fig->tiempoInicio != 0){
+        my_thread_wait(fig->tiempoInicio);
+    }
 
     while (1) {
 

@@ -47,16 +47,19 @@ int main(int argc, char*argv[]){
         initLista();
 
       
-	pFigura* fig1 = figura_create(1, 0, 0, 0, 1, 2, 1,1000,1,0,1,1,40,0,35000,asignarMonitor(0));
-        pFigura* fig2 = figura_create(2, 40, 0, 0, 5, 6, 1,1000,1,0,-1,1,0,0,35000,asignarMonitor(40));
-        pFigura* fig3 = figura_create(3, 0, 8, 0, 3, 4, 1,500,1,0,1,1,80,8,50000,asignarMonitor(0));
+	pFigura* fig1 = figura_create(1, 0, 0, 0, 1, 2, 1,300,1,0,1,1,40,0,25000,asignarMonitor(0),0);
+        pFigura* fig2 = figura_create(2, 40, 0, 0, 5, 6, 1,200,1,0,-1,1,0,0,45000,asignarMonitor(40),0);
+        pFigura* fig3 = figura_create(3, 0, 8, 0, 3, 4, 1,500,1,0,1,1,80,8,40000,asignarMonitor(0),5000);
+        pFigura* fig4 = figura_create(4, 120, 8, 0, 6, 7, 1,700,1,0,-1,1,0,8,60000,asignarMonitor(120),2000);
         agregarFiguraLista(fig1);
         agregarFiguraLista(fig2);
         agregarFiguraLista(fig3);
+        agregarFiguraLista(fig4);
         
         int t1 =my_thread_create(pintame, 1, (void*)fig1,1,0);
         int t2 = my_thread_create(pintame, 1, (void*)fig2,1,0);
         int t3 = my_thread_create(pintame, 1, (void*)fig3,1,0);
+        int t4 = my_thread_create(pintame, 1, (void*)fig4,1,0);
         
   
     	while(1);
