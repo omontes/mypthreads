@@ -2,7 +2,7 @@
 
 pFigura* figura_create(int id, int x, int y, int rotation, int colorIn, 
         int colorOut, int enable, double waitTime, int incre_x, int incre_y, 
-        int dirx, int diry, int x_final, int y_final)
+        int dirx, int diry, int x_final, int y_final, double lifeTime, int monitor)
 {
     pFigura* new_figure = (pFigura*)malloc(sizeof(pFigura));
 
@@ -26,7 +26,14 @@ pFigura* figura_create(int id, int x, int y, int rotation, int colorIn,
         new_figure->diry = diry;
         new_figure->x_final = x_final;
         new_figure->y_final = y_final;
- 
+        new_figure->lifeTime = lifeTime;
+        new_figure->monitor = monitor;
+        
+        
+        
+        //PARAMETROS DE CONFIGURACION QUE NO SON CONFIGURABLES SINO DE CONTROL
+        new_figure->startTime = clock();
+        
         
         return new_figure;
     }

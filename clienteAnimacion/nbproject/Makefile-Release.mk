@@ -37,7 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/figura.o \
 	${OBJECTDIR}/list.o \
-	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/main_cliente.o \
 	${OBJECTDIR}/tclient.o
 
 
@@ -75,10 +75,10 @@ ${OBJECTDIR}/list.o: list.c
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/list.o list.c
 
-${OBJECTDIR}/main.o: main.c 
+${OBJECTDIR}/main_cliente.o: main_cliente.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.c
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main_cliente.o main_cliente.c
 
 ${OBJECTDIR}/tclient.o: tclient.c 
 	${MKDIR} -p ${OBJECTDIR}

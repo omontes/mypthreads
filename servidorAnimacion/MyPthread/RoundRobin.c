@@ -36,33 +36,34 @@ void scheduler() {
         if (TCBReadyQueue->size != 0 | sorted_threads->size!=0) {
             TCB* nextThread = (TCB*)malloc(sizeof(TCB));
             if (flag == 0) {//TENER CUIDADO CON QUE TCBReadyQueue este vacia
-                //printf("lo ultimo que veo\n");
+                printf("lo ultimo que veo\n");
+                
                 if (TCBReadyQueue->size == 0) {
-                    //printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
+                    printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
                     nextThread = obtenerMaximoTiquetes();
-                    //printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
+                    printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
                     TCB_list_remove(sorted_threads, nextThread);
                     flag = 1;
                 } else {
-                    //printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
+                    printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
                     nextThread = DequeueTCB(TCBReadyQueue);
-                    //printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
+                    printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
                     flag = 1;
                 }
             } else if(flag==1) {
                 if (sorted_threads->size == 0) {
                     
-                    //printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
-                    //printf("no tengo hilos de sorteo\n");
+                    printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
+                    printf("no tengo hilos de sorteo\n");
                     nextThread = DequeueTCB(TCBReadyQueue);
-                    //printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
+                    printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
                     flag=0;
                     
 
                 } else if(sorted_threads->size > 0) {
-                    //printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
+                    printf("hilo que se estaba ejecutando: %d\n",currentThread->thread_id);
                     nextThread = obtenerMaximoTiquetes();
-                    //printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
+                    printf("hilo deberia ejecutarse: %d\n",nextThread->thread_id);
                     TCB_list_remove(sorted_threads, nextThread);
                     flag=0;
                     
@@ -74,14 +75,14 @@ void scheduler() {
             ready(currentThread);
             currentThread = nextThread;
             currentThread->state = RUNNING;
-            //printf("hilo num ejecutandose: %d\n",nextThread->thread_id);
+            printf("hilo num ejecutandose: %d\n",nextThread->thread_id);
             wakeupThreads();
             dispatch(nextThread);
             unlockSignals();
             
         }
         else{
-            //printf("ciclado\n");
+            printf("ciclado\n");
             wakeupThreads();
             dispatch(runningThread);
         }

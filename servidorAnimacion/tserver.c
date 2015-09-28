@@ -62,6 +62,9 @@ int listener(void*sock) {
     return new_sock;
 }
 
+
+
+
 void *pintame(pFigura* fig) {
 
 
@@ -72,17 +75,28 @@ void *pintame(pFigura* fig) {
         printf("yinit %d\n", fig->y_init);
 
 
+         if(isDead(fig)==1){
+            fig->enable = 0;
+            eliminarFiguraLista(fig);
+            elegirSocketEnviarPosicionFigura(fig);
+            break;    
+        }
+        
+        while(verificarExisteChoque(fig)==1) {
+            if (isDead(fig) == 1) {
+                fig->enable = 0;
+                eliminarFiguraLista(fig);
+                elegirSocketEnviarPosicionFigura(fig);
+                return;
+            }
+            my_thread_yield();
+        }
+        
+        //VALIDAR SI ESTA MUERTO Y LUEGO ELIMINAR DE LA LISTA Y LUEGO BREAK
 
-        //-VALIDAR EL CASO CUANDO LA LISTAS ESTAN VACIAS, DEBE YA TENER LOS DOS SOCKETS CREADOS
-        //-TENER CUIDADO CON QUE HAY QUE INICIALIZAR LAS LISTAS
-        //OPERACIOS CON LAS LISTAS
-        // HACER AGREGAR, ELIMINAR(CAMBIAR DE MONITOR O DESPUES DE ESTE WHILE) Y ACTUALIZAR(DESPUES DE CAMBIAR POSICION) SEGUN EL MONITOR QUE ESTE
-        //FALTA LA LOGICA QUE DECIDE A QUE MONITOR VA A PINTARSE Y SI TIENE QUE
-        //CAMBIAR DE MONITAR --> ELIMINARSE DE LA LISTA DE UN MONITOR Y ENTRAR 
-        //EN OTRO.
-        //VALIDAR LOS CHOQUES CON LAS LISTAS DE CADA MONITOR
-
-        verificarExisteChoque(fig);//verifica si la figura a pintar choca, en caso de hacerlo espera 
+       
+        
+        //verifica si la figura a pintar choca, en caso de hacerlo espera 
         elegirSocketEnviarPosicionFigura(fig);
 
         fig->x_init += (fig->incre_x * fig->dirx);
@@ -118,7 +132,18 @@ void *pintame(pFigura* fig) {
 
 }
 
-
+int isDead(pFigura* figura){
+    clock_t end;
+    double total;
+    end =clock();
+    total = (end - figura->startTime) / (double) 1000;
+    if(total>=figura->lifeTime){
+        return 1;
+    }
+    return 0;
+    
+    
+}
 //Lista figuras
 
 void initLista() {
@@ -174,27 +199,37 @@ int verificarChoqueY(int nueva_posicion_y,pFigura* figura){
     }
 }
 
-void verificarExisteChoque(pFigura* figura) {
+int verificarExisteChoque(pFigura* figura) {
     pNodo* pointer = listaFiguras->front;
     int nueva_posicion_x = figura->x_init;
     int nueva_posicion_y = figura->y_init;
     while (pointer != NULL) {
         pFigura* fig = pointer->data;
         //choque en x
-        if (fig != figura) {
+        if(!equals(fig,figura)){
             if (verificarChoqueX(nueva_posicion_x, fig) == 1 && verificarChoqueY(nueva_posicion_y, fig) == 1) {
                 printf("hubo un choque !!!!!!!!!!!!!!!!!\n");
-                //my_thread_wait(9000000);
+                return 1;
             }
         }
         pointer = pointer->next;
     }
+    return 0;
 
 }
 
 
 
 //animacion
+
+int asignarMonitor(int xInit){
+    int cantidad_columnas = 80;
+    if (xInit <= cantidad_columnas) {
+        return 1;
+    }else if(xInit > cantidad_columnas) {
+        return 2;
+    }
+}
 
 int rotacionIncrementalFigura(int angulo) {
     int nuevo_angulo = 0;
@@ -210,6 +245,15 @@ void elegirSocketEnviarPosicionFigura(pFigura* figura) {
     char buf[1023];
     int cantidad_columnas = 80;
     if (figura->x_init < cantidad_columnas - 9) {
+        if(figura->monitor == 2){
+            figura->enable = 0;
+            serialize(figura, buf, 1, cantidad_columnas);
+            send(socket_monitor_2, buf, sizeof (buf), 0);
+            buf[0] = '\0';  
+            figura->monitor = 1;
+            figura->enable = 1;
+        }
+            
         serialize(figura, buf, 0, cantidad_columnas);
         send(socket_monitor_1, buf, sizeof (buf), 0);
     } else if (figura->x_init >= cantidad_columnas - 9 && figura->x_init < cantidad_columnas) {
@@ -223,12 +267,14 @@ void elegirSocketEnviarPosicionFigura(pFigura* figura) {
         send(socket_monitor_2, buf, sizeof (buf), 0);
     }
     else if (figura->x_init >= cantidad_columnas) {
-        figura->enable = 0;
-        serialize(figura, buf, 0, cantidad_columnas);
-        send(socket_monitor_1, buf, sizeof (buf), 0);
-        buf[0] = '\0';
-
-        figura->enable = 1;
+        if(figura->monitor == 1){
+            figura->enable = 0;
+            serialize(figura, buf,0 , cantidad_columnas);
+            send(socket_monitor_1, buf, sizeof (buf), 0);
+            buf[0] = '\0';  
+            figura->monitor = 2;
+            figura->enable = 1;
+        }
         serialize(figura, buf, 1, cantidad_columnas);
         send(socket_monitor_2, buf, sizeof (buf), 0);
     }

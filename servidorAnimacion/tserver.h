@@ -44,12 +44,15 @@ void agregarFiguraLista(pFigura* figura);
 void actualizarFiguraLista(pFigura* figura);
 void eliminarFiguraLista(pFigura* figura);
 
-void verificarExisteChoque(pFigura* figura);
+int verificarExisteChoque(pFigura* figura);
 int verificarChoqueY(int nueva_posicion_y,pFigura* figura);
 int verificarChoqueX(int nueva_posicion_x,pFigura* figura);
 
 
+
 // animacion
+int asignarMonitor(int xInit);
+int isDead(pFigura* figura);
 void* pintame();
 void elegirSocketEnviarPosicionFigura(pFigura* figura);
 int rotacionIncrementalFigura(int angulo);

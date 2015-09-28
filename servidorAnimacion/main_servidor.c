@@ -6,7 +6,7 @@ myMutex* mt;
 void sig_int(int signo)
 {       
         close(socket_monitor_1);
-        //close(socket_monitor_2);
+        close(socket_monitor_2);
 	printf("Exit\n");
 	exit(0);
 }
@@ -28,7 +28,7 @@ int main(int argc, char*argv[]){
 	}
         /*Inicializa los sockets de los monitores 1 y 2*/
 	int contador_sockets;
-	for(contador_sockets = 0; contador_sockets < 1;contador_sockets++){
+	for(contador_sockets = 0; contador_sockets < 2;contador_sockets++){
 		 if(contador_sockets == 0){          
                         socket_monitor_1 = listener((void*)&sock);
                         printf("creo monitor 1\n");}
@@ -42,22 +42,21 @@ int main(int argc, char*argv[]){
         my_thread_init();
         my_mutex_init();
         mt = my_mutex_create();
-        my_thread_wait(100);
-        
+              
         //init lista
         initLista();
 
       
-	pFigura* fig1 = figura_create(1, 0, 3, 0, 1, 2, 1,2000.0,2,0,1,1,26,3);
-        pFigura* fig2 = figura_create(2, 35, 0, 0, 5, 6, 1,500.0,0,1,1,1,35,8);
-        //pFigura* fig3 = figura_create(3, 60, 0, 0, 3, 4, 1,3000,0,1,1,1,60,8);
+	pFigura* fig1 = figura_create(1, 0, 0, 0, 1, 2, 1,1000,1,0,1,1,40,0,35000,asignarMonitor(0));
+        pFigura* fig2 = figura_create(2, 40, 0, 0, 5, 6, 1,1000,1,0,-1,1,0,0,35000,asignarMonitor(40));
+        pFigura* fig3 = figura_create(3, 0, 8, 0, 3, 4, 1,500,1,0,1,1,80,8,50000,asignarMonitor(0));
         agregarFiguraLista(fig1);
         agregarFiguraLista(fig2);
-        //agregarFiguraLista(fig3);
+        agregarFiguraLista(fig3);
         
         int t1 =my_thread_create(pintame, 1, (void*)fig1,1,0);
         int t2 = my_thread_create(pintame, 1, (void*)fig2,1,0);
-        //int t3 = my_thread_create(pintame, 1, (void*)fig3,1,0);
+        int t3 = my_thread_create(pintame, 1, (void*)fig3,1,0);
         
   
     	while(1);
