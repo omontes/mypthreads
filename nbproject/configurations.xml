@@ -34,7 +34,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>Main.c</itemPath>
+      <itemPath>main_mypthreads.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -66,8 +66,6 @@
       </item>
       <item path="Dispatcher.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Main.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="Mutex.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Mutex.h" ex="false" tool="3" flavor2="0">
@@ -103,6 +101,8 @@
       <item path="Timer.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Timer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main_mypthreads.c" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -133,8 +133,6 @@
       </item>
       <item path="Dispatcher.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Main.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="Mutex.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Mutex.h" ex="false" tool="3" flavor2="0">
@@ -170,6 +168,8 @@
       <item path="Timer.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Timer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main_mypthreads.c" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
   </confs>

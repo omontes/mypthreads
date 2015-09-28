@@ -37,7 +37,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/ContextManage.o \
 	${OBJECTDIR}/Dispatcher.o \
-	${OBJECTDIR}/Main.o \
 	${OBJECTDIR}/Mutex.o \
 	${OBJECTDIR}/MyMutex.o \
 	${OBJECTDIR}/MyPthread.o \
@@ -46,7 +45,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/TCB.o \
 	${OBJECTDIR}/TCB_Queue.o \
 	${OBJECTDIR}/TCB_list.o \
-	${OBJECTDIR}/Timer.o
+	${OBJECTDIR}/Timer.o \
+	${OBJECTDIR}/main_mypthreads.o
 
 
 # C Compiler Flags
@@ -82,11 +82,6 @@ ${OBJECTDIR}/Dispatcher.o: Dispatcher.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Dispatcher.o Dispatcher.c
-
-${OBJECTDIR}/Main.o: Main.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Main.o Main.c
 
 ${OBJECTDIR}/Mutex.o: Mutex.c 
 	${MKDIR} -p ${OBJECTDIR}
@@ -132,6 +127,11 @@ ${OBJECTDIR}/Timer.o: Timer.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Timer.o Timer.c
+
+${OBJECTDIR}/main_mypthreads.o: main_mypthreads.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main_mypthreads.o main_mypthreads.c
 
 # Subprojects
 .build-subprojects:
