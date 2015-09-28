@@ -15,6 +15,7 @@
 #include "list.h"
 #include <unistd.h>
 #include <libconfig.h>
+#include "MyPthread/Mutex.h"
 
 #ifndef TSERVER_H
 #define	TSERVER_H
@@ -25,7 +26,7 @@
 
 //lista
 pLista* listaFiguras;
-
+myMutex* mt;
 
 //socket
 
@@ -35,7 +36,7 @@ int socket_monitor_2;
 
 int open_socket();
 int listener(void*sock);
-
+int returnDirection(int num);
 // Serialize
 void serialize(pFigura* figura, char* buffer,int monitor_num,int cantidad_columnas);//monitor_num : identificador de cada monitor, inicia en 0
 
@@ -60,6 +61,8 @@ int rotacionIncrementalFigura(int angulo);
 
 //lectura cfg
 void crearFigurasCFG(void);
+
+
 
 #endif	/* TSERVER_H */
 

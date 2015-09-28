@@ -1,4 +1,6 @@
 #include "tserver.h"
+#include "MyPthread/Mutex.h"
+#include "MyPthread/MyPthread.h"
 
 int open_socket() {
     struct sockaddr_in saddr;
@@ -100,12 +102,16 @@ void *pintame(pFigura* fig) {
         
         //verifica si la figura a pintar choca, en caso de hacerlo espera 
         elegirSocketEnviarPosicionFigura(fig);
-
-        fig->x_init += (fig->incre_x * fig->dirx);
-        fig->y_init += (fig->incre_y * fig->diry);
+        
+        my_thread_wait(fig->waitTime);
+        //my_mutex_block(mt);
+        
+        fig->x_init += (fig->incre_x * returnDirection(fig->dirx));
+        fig->y_init += (fig->incre_y * returnDirection(fig->diry));
         if(fig->animacion != 0)
             fig->rotation = rotacionIncrementalFigura(fig->rotation);
-        my_thread_wait(fig->waitTime);
+        //my_mutex_unblock(mt);
+        
 
 
         if ((fig->x_init == fig->x_final) && (fig->y_init == fig->y_final)) {
@@ -136,6 +142,15 @@ void *pintame(pFigura* fig) {
 
 }
 
+int returnDirection(int num){
+    if(num==1){
+        return 1;
+    }
+    else{
+        return -1;
+    }
+}
+
 int isDead(pFigura* figura){
     clock_t end;
     double total;
@@ -152,6 +167,8 @@ int isDead(pFigura* figura){
 
 void initLista() {
     listaFiguras = list_create();
+    my_mutex_init();
+    mt = (myMutex*)my_mutex_create();
 }
 
 void agregarFiguraLista(pFigura* figura) {
@@ -181,7 +198,10 @@ void eliminarFiguraLista(pFigura* figura) {
 
 //comprueba choque componente x
 int verificarChoqueX(int nueva_posicion_x,pFigura* figura){
-    if(((figura->x_init <= nueva_posicion_x) && (nueva_posicion_x <= (figura->x_init+10))) || ((figura->x_init <= (nueva_posicion_x+10)) && ((nueva_posicion_x+10) <= (figura->x_init+10))))
+    if(
+            ((figura->x_init <= nueva_posicion_x) && (nueva_posicion_x <= (figura->x_init+10)))
+            || 
+            ((figura->x_init <= (nueva_posicion_x+10)) && ((nueva_posicion_x+10) <= (figura->x_init+10))))
     {
         printf("choque en x ************ \n");
         return 1;

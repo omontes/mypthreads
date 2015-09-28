@@ -4,8 +4,6 @@
 #include "MyPthread/TCB.h"
 
 
-myMutex* mt;
-
 void sig_int(int signo) {
     close(socket_monitor_1);
     close(socket_monitor_2);
@@ -51,13 +49,12 @@ int main(int argc, char*argv[]) {
     printf("ya cree todos los sockets\n");
 
     my_thread_init();
-    my_mutex_init();
-    mt = my_mutex_create();
-     
+    
+        
     //init lista
     initLista();
 
-
+    
     //Lectura figuras
     config_t cfg, *cf;
     cf = &cfg;
@@ -81,7 +78,7 @@ int main(int argc, char*argv[]) {
         config_setting_lookup_int(figura_actual, "Yinit", &yInit);
         config_setting_lookup_int(figura_actual, "Xincremento", &xIncremento);
         config_setting_lookup_int(figura_actual, "Yincremento", &yIncremento);
-        config_setting_lookup_int(figura_actual, "Ydir", &xDir);
+        config_setting_lookup_int(figura_actual, "Xdir", &xDir);
         config_setting_lookup_int(figura_actual, "Ydir", &yDir);
         config_setting_lookup_int(figura_actual, "XFinal", &xFinal);
         config_setting_lookup_int(figura_actual, "YFinal", &yFinal);
@@ -95,7 +92,8 @@ int main(int argc, char*argv[]) {
         config_setting_lookup_int(figura_actual, "TipoScheduler", &tipoScheduler);
         config_setting_lookup_int(figura_actual, "Tiquetes", &tiquetes);
         
-        pFigura* fig = figura_create(n,xInit,yInit,rotacion,colorIn,colorOut,1,tiempoIntervalo,xIncremento,yIncremento, xDir,yDir,xFinal,yFinal,tiempoVida,asignarMonitor(xInit),tiempoInicio,animacion);
+        pFigura* fig = figura_create(n,xInit,yInit,rotacion,colorIn,colorOut,1,tiempoIntervalo,xIncremento,yIncremento,xDir,yDir,xFinal,yFinal,tiempoVida,asignarMonitor(xInit),tiempoInicio,animacion);
+        printf("soy xdir: %d",fig->dirx);
         agregarFiguraLista(fig);
         my_thread_create(pintame, 1, (void*) fig, tipoScheduler, tiquetes);
 
@@ -103,20 +101,20 @@ int main(int argc, char*argv[]) {
     config_destroy(cf);
 
     /*
-    pFigura* fig1 = figura_create(1, 0, 0, 0, 1, 2, 1, 300, 1, 0, 1, 1, 40, 0, 25000, asignarMonitor(0), 0, 1);
-    pFigura* fig2 = figura_create(2, 40, 0, 0, 5, 6, 1, 200, 1, 0, -1, 1, 0, 0, 45000, asignarMonitor(40), 0, 1);
-    pFigura* fig3 = figura_create(3, 0, 8, 0, 3, 4, 1, 500, 1, 0, 1, 1, 80, 8, 40000, asignarMonitor(0), 5000, 1);
-    pFigura* fig4 = figura_create(4, 120, 8, 0, 6, 7, 1, 700, 1, 0, -1, 1, 0, 8, 60000, asignarMonitor(120), 2000, 1);
+    //pFigura* fig1 = figura_create(1, 0, 0, 0, 1, 2, 1, 100, 1, 0, 1, 1, 90, 0, 45000, asignarMonitor(0), 0, 1);
+    //pFigura* fig2 = figura_create(2, 40, 0, 0, 5, 6, 1, 1000, 1, 0, 1, 1, 80, 0, 45000, asignarMonitor(40), 0, 1);
+    //pFigura* fig3 = figura_create(3, 0, 8, 0, 3, 4, 1, 500, 1, 0, 1, 1, 80, 8, 40000, asignarMonitor(0), 5000, 0);
+    //pFigura* fig4 = figura_create(4, 120, 8, 0, 6, 7, 1, 700, 1, 0, -1, 1, 0, 8, 60000, asignarMonitor(120), 2000, 0);
     agregarFiguraLista(fig1);
     agregarFiguraLista(fig2);
-    agregarFiguraLista(fig3);
-    agregarFiguraLista(fig4);
+    //agregarFiguraLista(fig3);
+    //agregarFiguraLista(fig4);
 
     my_thread_create(pintame, 1, (void*) fig1, 1, 0);
     my_thread_create(pintame, 1, (void*) fig2, 1, 0);
-    my_thread_create(pintame, 1, (void*) fig3, 1, 0);
-    my_thread_create(pintame, 1, (void*) fig4, 1, 0);
-     */
+    //my_thread_create(pintame, 1, (void*) fig3, 1, 0);
+    //my_thread_create(pintame, 1, (void*) fig4, 1, 0);
+    */
 
     while (1);
     //my_thread_join(t3);

@@ -150,7 +150,7 @@ switch(rotation){
         }
      break;
   case 90:
-     startcol = startcol + length*2+2;
+     startcol = startcol + length*2+1;
      for(r=startrow;r<=startrow+length;r++)
      {          
         mvwprintw(win,r,startcol,"  ");   
