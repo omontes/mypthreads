@@ -66,8 +66,9 @@
         <linkerTool>
           <linkerLibItems>
             <linkerOptionItem>-lpthread</linkerOptionItem>
+            <linkerOptionItem>-lconfig</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>-lpthread</commandLine>
+          <commandLine>-lpthread -lconfig</commandLine>
         </linkerTool>
       </compileType>
       <item path="MyPthread/ContextManage.c" ex="false" tool="0" flavor2="0">

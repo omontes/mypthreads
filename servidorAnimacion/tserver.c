@@ -103,6 +103,8 @@ void *pintame(pFigura* fig) {
 
         fig->x_init += (fig->incre_x * fig->dirx);
         fig->y_init += (fig->incre_y * fig->diry);
+        if(fig->animacion != 0)
+            fig->rotation = rotacionIncrementalFigura(fig->rotation);
         my_thread_wait(fig->waitTime);
 
 
@@ -283,3 +285,9 @@ void elegirSocketEnviarPosicionFigura(pFigura* figura) {
     buf[0] = '\0';
 }
 
+// leer archivo configuracion 
+void crearFigurasCFG(void){
+    
+   
+    
+}

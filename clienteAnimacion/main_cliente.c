@@ -43,8 +43,8 @@ int main(int argc, char*argv[]){
                 pFigura* fig = (pFigura*)malloc(sizeof(pFigura));
 		unser(fig,buf);
                
-                mvwprintw(status_w,3,2,"yinit%d\n",fig->y_init);
-                wrefresh(status_w);
+                //mvwprintw(status_w,3,2,"yinit%d\n",fig->y_init);
+                //wrefresh(status_w);
                 
                 //limpiar ventana
 		wclear(field_w);

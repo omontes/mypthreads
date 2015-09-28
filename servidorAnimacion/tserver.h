@@ -14,6 +14,7 @@
 #include <signal.h>
 #include "list.h"
 #include <unistd.h>
+#include <libconfig.h>
 
 #ifndef TSERVER_H
 #define	TSERVER_H
@@ -57,6 +58,8 @@ void* pintame();
 void elegirSocketEnviarPosicionFigura(pFigura* figura);
 int rotacionIncrementalFigura(int angulo);
 
+//lectura cfg
+void crearFigurasCFG(void);
 
 #endif	/* TSERVER_H */
 

@@ -50,6 +50,7 @@ void procesarFiguraEntrante(pFigura* figura){
         else{
             fig->x_init = figura->x_init;
             fig->y_init = figura->y_init;
+            fig->rotation = figura->rotation;
             
         }
     }
@@ -121,7 +122,7 @@ void show_ncurs(){
 	field_w = newwin(row-status_size,col,0,0 );
 	status_w = newwin(status_size,col,row-status_size,0 );
 
-	mvwprintw(status_w,1,2,"Client: 1");
+	mvwprintw(status_w,1,2,"Client:");
 	wrefresh(status_w);
 
 

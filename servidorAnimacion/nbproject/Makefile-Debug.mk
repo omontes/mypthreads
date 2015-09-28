@@ -66,7 +66,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lpthread
+LDLIBSOPTIONS=-lpthread -lconfig
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -74,7 +74,7 @@ LDLIBSOPTIONS=-lpthread
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servidoranimacion: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servidoranimacion ${OBJECTFILES} ${LDLIBSOPTIONS} -lpthread
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servidoranimacion ${OBJECTFILES} ${LDLIBSOPTIONS} -lpthread -lconfig
 
 ${OBJECTDIR}/MyPthread/ContextManage.o: MyPthread/ContextManage.c 
 	${MKDIR} -p ${OBJECTDIR}/MyPthread

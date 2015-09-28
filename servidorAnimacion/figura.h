@@ -39,8 +39,9 @@ struct figura_struct {
     int x_final;
     int y_final;
     
-     int monitor;
+    int monitor;
     
+    int animacion;
     //PARAMETROS DE CONTROL
     double startTime;
     
@@ -52,7 +53,7 @@ typedef struct figura_struct pFigura;
 pFigura* figura_create(int id, int x_inicial, int y_inicial, int rotation, int colorIn,
         int colorOut, int enable, double waitTime, int incre_x, int incre_y, 
         int dirx, int diry, int x_final, int y_final, double lifeTime,
-        int monitor, double tiempoInicio);
+        int monitor, double tiempoInicio, int animacion);
 int equals(pFigura* t1, pFigura* t2);
 
 
