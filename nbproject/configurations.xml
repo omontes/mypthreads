@@ -9,7 +9,6 @@
       <itemPath>Mutex.h</itemPath>
       <itemPath>MyMutex.h</itemPath>
       <itemPath>MyPthread.h</itemPath>
-      <itemPath>Queue.h</itemPath>
       <itemPath>RoundRobin.h</itemPath>
       <itemPath>TCB.h</itemPath>
       <itemPath>TCBQueue.h</itemPath>
@@ -24,7 +23,6 @@
       <itemPath>Mutex.c</itemPath>
       <itemPath>MyMutex.c</itemPath>
       <itemPath>MyPthread.c</itemPath>
-      <itemPath>Queue.c</itemPath>
       <itemPath>RoundRobin.c</itemPath>
       <itemPath>TCB.c</itemPath>
       <itemPath>TCB_Queue.c</itemPath>
@@ -77,10 +75,6 @@
       <item path="MyPthread.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="MyPthread.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Queue.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="Queue.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="RoundRobin.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -144,10 +138,6 @@
       <item path="MyPthread.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="MyPthread.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Queue.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="Queue.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="RoundRobin.c" ex="false" tool="0" flavor2="0">
       </item>

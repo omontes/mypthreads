@@ -217,8 +217,7 @@ int verificarChoqueY(int nueva_posicion_y,pFigura* figura){
     {
         printf("choque en y ************ \n");
         return 1;
-    }
-    else{
+    } else {
         return 0;
     }
 }
@@ -230,7 +229,7 @@ int verificarExisteChoque(pFigura* figura) {
     while (pointer != NULL) {
         pFigura* fig = pointer->data;
         //choque en x
-        if(!equals(fig,figura)){
+        if (!equals(fig, figura)) {
             if (verificarChoqueX(nueva_posicion_x, fig) == 1 && verificarChoqueY(nueva_posicion_y, fig) == 1) {
                 printf("hubo un choque !!!!!!!!!!!!!!!!!\n");
                 return 1;
@@ -246,11 +245,11 @@ int verificarExisteChoque(pFigura* figura) {
 
 //animacion
 
-int asignarMonitor(int xInit){
+int asignarMonitor(int xInit) {
     int cantidad_columnas = 80;
     if (xInit <= cantidad_columnas) {
         return 1;
-    }else if(xInit > cantidad_columnas) {
+    } else if (xInit > cantidad_columnas) {
         return 2;
     }
 }
@@ -269,41 +268,72 @@ void elegirSocketEnviarPosicionFigura(pFigura* figura) {
     char buf[1023];
     int cantidad_columnas = 80;
     if (figura->x_init < cantidad_columnas - 9) {
-        if(figura->monitor == 2){
-            figura->enable = 0;
-            serialize(figura, buf, 1, cantidad_columnas);
-            send(socket_monitor_2, buf, sizeof (buf), 0);
-            buf[0] = '\0';  
-            figura->monitor = 1;
-            figura->enable = 1;
-        }
-            
         serialize(figura, buf, 0, cantidad_columnas);
         send(socket_monitor_1, buf, sizeof (buf), 0);
     } else if (figura->x_init >= cantidad_columnas - 9 && figura->x_init < cantidad_columnas) {
-
-
         serialize(figura, buf, 0, cantidad_columnas);
         send(socket_monitor_1, buf, sizeof (buf), 0);
         buf[0] = '\0';
-        printf("esta haciendo lo suyo");
-        serialize(figura, buf, 1, cantidad_columnas);
-        send(socket_monitor_2, buf, sizeof (buf), 0);
-    }
-    else if (figura->x_init >= cantidad_columnas) {
-        if(figura->monitor == 1){
+        if (cantidad_sockets > 1) {
+            serialize(figura, buf, 1, cantidad_columnas);
+            send(socket_monitor_2, buf, sizeof (buf), 0);
+        }
+    } else if (figura->x_init >= cantidad_columnas && figura->x_init < (cantidad_columnas * 2 - 9)) {
+        if (cantidad_sockets > 2) {
+            if (figura->monitor == 1) {
+                figura->monitor = 2;
+                figura->enable = 0;
+                serialize(figura, buf, 0, cantidad_columnas);
+                send(socket_monitor_1, buf, sizeof (buf), 0);
+                figura->enable = 1;
+                buf[0] = '\0';
+            } else if (figura->monitor == 3) {
+                figura->monitor = 2;
+                figura->enable = 0;
+                serialize(figura, buf, 2, cantidad_columnas);
+                send(socket_monitor_3, buf, sizeof (buf), 0);
+                figura->enable = 1;
+                buf[0] = '\0';
+            }
+            serialize(figura, buf, 1, cantidad_columnas);
+            send(socket_monitor_2, buf, sizeof (buf), 0);
+        }
+        else{
             figura->enable = 0;
-            serialize(figura, buf,0 , cantidad_columnas);
+            serialize(figura, buf, 0, cantidad_columnas);
             send(socket_monitor_1, buf, sizeof (buf), 0);
-            buf[0] = '\0';  
-            figura->monitor = 2;
             figura->enable = 1;
         }
+    } else if (figura->x_init >= (cantidad_columnas * 2 - 9) && figura->x_init < cantidad_columnas * 2) {
         serialize(figura, buf, 1, cantidad_columnas);
         send(socket_monitor_2, buf, sizeof (buf), 0);
+        buf[0] = '\0';
+        if (cantidad_sockets == 3) {
+            serialize(figura, buf, 2, cantidad_columnas);
+            send(socket_monitor_3, buf, sizeof (buf), 0);
+        }
+    } else if (figura->x_init >= cantidad_columnas * 2) {
+        if (cantidad_sockets == 3) {
+            if (figura->monitor == 2) {
+                figura->monitor = 3;
+                figura->enable = 0;
+                serialize(figura, buf, 1, cantidad_columnas);
+                send(socket_monitor_2, buf, sizeof (buf), 0);
+                figura->enable = 1;
+                buf[0] = '\0';
+            }
+            serialize(figura, buf, 2, cantidad_columnas);
+            send(socket_monitor_3, buf, sizeof (buf), 0);
+        } else {
+            figura->enable = 0;
+            serialize(figura, buf, 1, cantidad_columnas);
+            send(socket_monitor_2, buf, sizeof (buf), 0);
+            figura->enable = 1;
+        }
     }
     buf[0] = '\0';
-}
+};
+
 
 // leer archivo configuracion 
 void crearFigurasCFG(void){

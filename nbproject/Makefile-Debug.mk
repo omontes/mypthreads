@@ -40,7 +40,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/Mutex.o \
 	${OBJECTDIR}/MyMutex.o \
 	${OBJECTDIR}/MyPthread.o \
-	${OBJECTDIR}/Queue.o \
 	${OBJECTDIR}/RoundRobin.o \
 	${OBJECTDIR}/TCB.o \
 	${OBJECTDIR}/TCB_Queue.o \
@@ -97,11 +96,6 @@ ${OBJECTDIR}/MyPthread.o: MyPthread.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MyPthread.o MyPthread.c
-
-${OBJECTDIR}/Queue.o: Queue.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Queue.o Queue.c
 
 ${OBJECTDIR}/RoundRobin.o: RoundRobin.c 
 	${MKDIR} -p ${OBJECTDIR}

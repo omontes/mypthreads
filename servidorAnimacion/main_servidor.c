@@ -3,10 +3,14 @@
 #include "MyPthread/MyMutex.h"
 #include "MyPthread/TCB.h"
 
-
 void sig_int(int signo) {
     close(socket_monitor_1);
-    close(socket_monitor_2);
+    if (cantidad_sockets == 2) {
+        close(socket_monitor_2);
+    } else if (cantidad_sockets == 3) {
+        close(socket_monitor_2);
+        close(socket_monitor_3);
+    }
     printf("Exit\n");
     exit(0);
 }
@@ -22,7 +26,8 @@ int main(int argc, char*argv[]) {
     
 
     //init socket ***
-
+    cantidad_sockets = 3;
+    
     struct sigaction sa;
     sa.sa_handler = &sig_int;
     // Block every signal during the handler
@@ -36,14 +41,18 @@ int main(int argc, char*argv[]) {
         return -1;
     }
     /*Inicializa los sockets de los monitores 1 y 2*/
+    /*Inicializa los sockets de los monitores 1 y 2*/
     int contador_sockets;
-    for (contador_sockets = 0; contador_sockets < 2; contador_sockets++) {
+    for (contador_sockets = 0; contador_sockets < cantidad_sockets; contador_sockets++) {
         if (contador_sockets == 0) {
             socket_monitor_1 = listener((void*) &sock);
             printf("creo monitor 1\n");
-        } else {
+        } else if (contador_sockets == 1) {
             socket_monitor_2 = listener((void*) &sock);
             printf("creo monitor 2\n");
+        } else if (contador_sockets == 2) {
+            socket_monitor_3 = listener((void*) &sock);
+            printf("creo monitor 3\n");
         }
     }
     printf("ya cree todos los sockets\n");
@@ -120,9 +129,6 @@ int main(int argc, char*argv[]) {
     //my_thread_join(t3);
 
 
-
-    //close(socket_monitor_1);
-    //close(socket_monitor_2);
     printf("Exit\n");
     exit(0);
 }

@@ -29,14 +29,17 @@ pLista* listaFiguras;
 myMutex* mt;
 
 //socket
+int cantidad_sockets;
+
 
 int socket_monitor_1;
 int socket_monitor_2;
-
+int socket_monitor_3;
 
 int open_socket();
 int listener(void*sock);
 int returnDirection(int num);
+
 // Serialize
 void serialize(pFigura* figura, char* buffer,int monitor_num,int cantidad_columnas);//monitor_num : identificador de cada monitor, inicia en 0
 
@@ -53,6 +56,7 @@ int verificarChoqueX(int nueva_posicion_x,pFigura* figura);
 
 
 // animacion
+
 int asignarMonitor(int xInit);
 int isDead(pFigura* figura);
 void* pintame();
