@@ -56,12 +56,16 @@ int main(int argc, char*argv[]) {
         }
     }
     printf("ya cree todos los sockets\n");
+    
 
     my_thread_init();
     
+    printf("se hizo el init de my_thread\n");
         
     //init lista
     initLista();
+    
+      printf("se hizo el init de la lista figuras\n");
 
     
     //Lectura figuras
@@ -102,7 +106,6 @@ int main(int argc, char*argv[]) {
         config_setting_lookup_int(figura_actual, "Tiquetes", &tiquetes);
         
         pFigura* fig = figura_create(n,xInit,yInit,rotacion,colorIn,colorOut,1,tiempoIntervalo,xIncremento,yIncremento,xDir,yDir,xFinal,yFinal,tiempoVida,asignarMonitor(xInit),tiempoInicio,animacion);
-        printf("soy xdir: %d",fig->dirx);
         agregarFiguraLista(fig);
         my_thread_create(pintame, 1, (void*) fig, tipoScheduler, tiquetes);
 

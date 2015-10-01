@@ -24,6 +24,7 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -i 127.0.0.1</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
         </runcommandpicklist>
         <runcommand>"${OUTPUT_PATH}"</runcommand>
